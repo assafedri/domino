@@ -1,0 +1,61 @@
+@import '../../assets/scss/global.scss';
+
+.Skit{
+    @include container();
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-gap: 1em;
+    text-align: center;
+
+    @media($breakpoint1){
+        grid-template-columns: 1fr 1fr;
+        text-align: initial;
+        grid-gap: 2em;
+        align-items: center;
+        
+        h1              {grid-area: 1 / 1;}
+        .video          {grid-area: 2 / 2;}
+        .description    {grid-area: 2 / 1;}
+        .cast           {grid-area: 3 / 1;}
+        .charecters     {grid-area: 3 / 2;}
+        .comments       {
+            grid-area: 4 / 1;
+            grid-column: span 2;
+        }
+    }
+
+    .cast, .charecters {
+        align-self: flex-start;
+
+        ul{
+            display: flex;
+            align-items: flex-end;
+            flex-wrap: wrap;
+            justify-content: center;
+            
+            @media($breakpoint1){
+                justify-content: flex-start;
+            }
+
+            li{
+                flex: 0 0 75px;
+                margin: 15px 5px 0;
+                
+                a{
+                    text-decoration: none;
+                    display: block; 
+                }    
+
+                img{
+                    height: 100px;
+                    width: 100%;
+                    display: block;
+                    border: 1px solid black;
+                }
+                span{
+                    display: block;
+                }
+            }
+        }
+    }
+}

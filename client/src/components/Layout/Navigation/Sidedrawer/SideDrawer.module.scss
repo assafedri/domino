@@ -1,0 +1,34 @@
+@import '../../../../assets/scss/global.scss';
+
+.SideDrawer{
+    position: fixed;
+    width: 280px;
+    height: 100%;
+    max-width: 70%;
+    top: 0;
+    right: 0;
+    z-index: 2000;
+    background: $mainBkg;
+    padding: 1em;
+    box-sizing: border-box;
+    transition: transform 0.3s ease-out;
+    overflow: hidden;
+
+    @media($breakpoint1){
+        display: none;
+    }
+
+    &.Open{
+        transform: translateX(0);
+    }
+
+    &.Close{
+        transform: translateX(100%)
+    }
+
+    .Logo{
+        margin-bottom: 1em;
+        font-size: 1.25em;
+        color: $warningColor;
+    }
+}

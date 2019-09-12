@@ -1,0 +1,35 @@
+@import '../../../../assets/scss/global.scss';
+.NavItem{
+    display: flex;
+    flex-direction: column;
+
+    a{
+        text-decoration: none;
+        padding: 10px 0;
+        box-sizing: border-box;
+        display: block;
+
+        &:hover, &:active, &.active{
+            font-weight: 400;
+        }
+    }   
+
+    @media($breakpoint1){
+        flex-direction: row;
+        height: 100%;
+        align-items: center;
+
+        a{
+            padding: 21px 10px;
+            border-bottom: 4px solid transparent;
+
+            &:hover, &:active, &.active{
+                border-bottom-color: white;
+            }
+        }
+
+        :global a.active{
+            border-bottom-color: white;
+        }
+    }
+}

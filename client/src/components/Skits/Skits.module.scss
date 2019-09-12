@@ -1,0 +1,40 @@
+@import '../../assets/scss/global.scss';
+
+.Skits{
+    @include container;
+    width: 100%;
+    min-height: calc( 100vh - ( #{$footerHeight + px}));
+    display: grid;
+    grid-gap: 1em;
+    align-items: center;
+    justify-items: center;
+
+    @media($breakpoint1){
+        grid-template-columns: 1fr 1fr;
+        justify-items: start;
+
+        button{
+            justify-self: end;
+        }    
+    }
+
+    .Skitlist{
+        display: grid;
+        // grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        text-align: center;
+        grid-auto-flow: dense;
+        grid-gap: 1em;
+
+        @media($breakpoint1){
+            grid-column: span 2;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        }
+
+        &.Filtered{
+           > div {
+               grid-column: span 1;
+               grid-row: span 1;
+           }
+        }
+    }
+} 

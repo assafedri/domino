@@ -1,0 +1,42 @@
+@import '../../assets/scss/global.scss';
+
+.Cast{
+    ul{
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        padding: 2em 0;
+
+        li{
+            margin: 0.5em;
+            cursor: pointer;
+            transition: all 0.5s ease;
+
+            div{
+                width: 90px;
+                height: 120px;
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                border: 2px solid transparent;
+                transform: scale(1);
+                transition: transform 0.5s ease
+            }
+
+            &:hover, &.Selected {
+                div{
+                    border-color: $warningColor;
+                    transform: scale(1.25);
+                }
+            }
+
+            &:hover{
+                margin: 0.5em 2em;
+
+                div{
+                    transform: scale(1.5);
+                }
+            }
+        }
+    }
+}

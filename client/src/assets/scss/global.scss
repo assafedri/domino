@@ -1,0 +1,33 @@
+$breakpoint1: 'min-width: 768px';
+$breakpoint2: 'min-width: 992px';
+$breakpoint3: 'min-width: 1200px';
+$breakpoint4: 'min-width: 1400px';
+
+$mainBkg: linear-gradient(to right, rgb(35, 37, 38), rgb(65, 67, 69));
+$secBkg: #464749;
+
+$brandColor:#f1c40f;
+$textColor: #fff;
+
+$dangerColor: #e74c3c;
+$warningColor: #f1c40f;
+$successColor: #27ae60;
+
+$headerHeight: 70;
+$footerHeight: 70;
+
+@mixin container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1em;
+}
+
+@mixin narrow-container() {
+    @include container();
+    max-width: 600px;
+
+    h1{
+        text-align: center;
+    }
+    
+}

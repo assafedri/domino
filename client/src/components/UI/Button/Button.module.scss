@@ -1,0 +1,105 @@
+@import '../../../assets/scss/global.scss';
+
+.Button{
+    display: inline-block;
+    border: 1px solid #fff;
+    color: #fff;
+    background: transparent;
+    text-decoration: none;
+    padding: 5px 20px;
+    font-weight: 400;
+    font-size: 1em;
+    cursor: pointer;
+    
+    &:hover{
+        background: white;
+        color: transparent;
+        transition: all 0.25s ease;
+    }
+
+    &.Invert{
+        color: transparent;
+        background: #fff;
+
+        &:hover{
+            background: darken(#fff, 10%)
+        }
+    }
+
+    &.Danger{
+        border-color: $dangerColor;
+        color: $dangerColor;
+    
+        &:hover{
+            background: $dangerColor;
+            color: #fff;
+        }
+
+        &.Invert{
+            color: transparent;
+            background: $dangerColor;
+    
+            &:hover{
+                background: darken($dangerColor, 10%)
+            }
+        }
+    }
+
+    &.Warning{
+        border-color: $warningColor;
+        color: $warningColor;
+    
+        &:hover{
+            background: $warningColor;
+            color: #000;
+        }
+
+        &.Invert{
+            color: transparent;
+            background: $warningColor;
+    
+            &:hover{
+                background: darken($warningColor, 10%)
+            }
+        }
+    }
+
+    &.Success{
+        border-color: $successColor;
+        color: $successColor;
+    
+        &:hover{
+            background: $successColor;
+            color: #fff;
+        }
+
+        &.Invert{
+            color: transparent;
+            background: $warningColor;
+    
+            &:hover{
+                background: darken($warningColor, 10%)
+            }
+        }
+    }
+
+    &.sm{
+        padding: 3px 15px;
+        font-size: 0.75em;
+    }
+
+    &:disabled{
+        background: gray;
+        color: black;
+        border: none;
+        transition: all 3s ease-in-out;
+
+        &:hover{
+            cursor: not-allowed;
+            background: gray;
+            color: black;
+            border: none;
+            transition: all 3s ease-in-out;
+        }
+    }
+}

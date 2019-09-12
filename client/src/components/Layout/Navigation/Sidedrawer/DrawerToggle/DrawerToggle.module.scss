@@ -1,0 +1,16 @@
+@import '../../../../../assets/scss/global.scss';
+
+.Menu{
+    position: absolute;
+    right: 0;	top: 0;
+    width: $headerHeight + px;
+    display: flex;
+    height: $headerHeight + px;
+    align-items: center;
+    padding: 1em;
+    cursor: pointer;
+
+    @media($breakpoint1){
+        display: none;
+    }			
+}

@@ -1,0 +1,19 @@
+.Member{
+    display: grid;
+    grid-gap: 1em;
+    justify-items: center;
+    text-align: center;
+
+    .Admin{
+      form{
+          display: inline;
+      }  
+    }
+
+    .Image{
+        img{
+            width: 100%;
+            max-width: 320px;
+        }
+    }
+}

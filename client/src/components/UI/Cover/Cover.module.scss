@@ -1,0 +1,45 @@
+@import '../../../assets/scss/global.scss';
+
+.Cover{
+    height: 100vw;
+    overflow: hidden;
+    background: url(https://pbs.twimg.com/media/D1hLlRwWkAEtNKv.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+
+    @media($breakpoint1){
+        height: 75vh;
+        background-attachment: fixed;
+    }
+
+    &:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.75);
+    }
+
+    > div{
+        z-index: 1;
+        color: #fff;
+        font-weight: 100;
+        margin: 2em;
+        text-align: center;
+
+        > * {
+            margin: 0 0 1em;
+        }
+
+        @media($breakpoint1){
+            font-size: 1.5em;
+        }
+    }
+}
