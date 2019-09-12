@@ -21,7 +21,7 @@ class SkitPage extends React.Component{
     }
 
     getSkitData = (id) => {
-        axios.get(`/skits/${id}`)
+        axios.get(`/api/skits/${id}`)
         .then( response => {
             if(response.status === 200){
                 this.setState({skit: response.data, loading: false})

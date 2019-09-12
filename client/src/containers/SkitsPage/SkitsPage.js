@@ -14,7 +14,7 @@ class SkitsPage extends React.Component{
     componentDidMount(){
         this.setState({loading: true})
 
-        axios.get('/')
+        axios.get('api/')
             .then( response => {
                 this.setState({
                     allSkits: response.data,

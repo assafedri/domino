@@ -56,7 +56,7 @@ const NewSkit = () => {
     useEffect( () => {
         console.log('effect');
         let isSubscribed = true;
-        axios.get('/cast')
+        axios.get('api/cast')
         .then(response => {
             if(isSubscribed && !fields.cast.options){
                 const castData = response.data.map( member => {

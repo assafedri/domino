@@ -17,7 +17,7 @@ class CastPage extends React.Component{
     componentDidMount(){
         this.setState({loading: false})
 
-        axios.get('/cast')
+        axios.get('api/cast')
             .then(response => {
                 let index = 0;
 
