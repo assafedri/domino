@@ -30,6 +30,8 @@ app.use(express.static(path.join(__dirname, 'client/build')));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+console.log(path.join(__dirname, './client/build'))
+
 // Express routes ----------------------------------------------------------------------
 app.get('/api', async(req,res) => {
     const allSkits = await Skit.find({}).sort({'aired.season': 1, 'aired.episode': 1})
