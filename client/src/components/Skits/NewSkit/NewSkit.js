@@ -118,7 +118,7 @@ const NewSkit = () => {
         //     formData[key] = fields[key].value;
         // }
 
-        axios.post('/', formData)
+        axios.post('/api', formData)
             .then(response => {
                 setLoading(false)
             })
