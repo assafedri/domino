@@ -88,5 +88,5 @@ app.get('*', (req, res) => {
 
 
 // Server Listen -----------------------------------------------------------------------
-const API_PORT = 3001;
+const API_PORT = process.env.PORT || 5000;
 app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
