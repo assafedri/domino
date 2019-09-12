@@ -82,11 +82,12 @@ app.get('/api/cast/:id', (req,res) => {
 })
 
 app.get('*', (req, res) => {
-    console.log(req)
     res.sendFile(path.join(__dirname+'/client/public/index.html'));
 });
 
 
 // Server Listen -----------------------------------------------------------------------
+
 const API_PORT = process.env.PORT || 5000;
-app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));
+const API_HOST = process.env.HOST || 'localhost'
+app.listen(API_PORT, API_HOST, () => console.log(`Listening on port ${API_PORT}`));
