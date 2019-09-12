@@ -8,10 +8,13 @@
     grid-gap: 1em;
     align-items: center;
     justify-items: center;
+    text-align: center;
+    align-content: start;
 
     @media($breakpoint1){
         grid-template-columns: 1fr 1fr;
         justify-items: start;
+        text-align: inherit;
 
         button{
             justify-self: end;
@@ -20,14 +23,13 @@
 
     .Skitlist{
         display: grid;
-        // grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
         text-align: center;
         grid-auto-flow: dense;
         grid-gap: 1em;
 
         @media($breakpoint1){
             grid-column: span 2;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
         }
 
         &.Filtered{

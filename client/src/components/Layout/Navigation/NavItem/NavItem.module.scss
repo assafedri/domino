@@ -20,16 +20,16 @@
         align-items: center;
 
         a{
-            padding: 21px 10px;
+            padding: 21px 15px;
             border-bottom: 4px solid transparent;
 
             &:hover, &:active, &.active{
-                border-bottom-color: white;
+                border-bottom-color: black;
             }
         }
 
         :global a.active{
-            border-bottom-color: white;
+            border-bottom-color: black;
         }
     }
 }

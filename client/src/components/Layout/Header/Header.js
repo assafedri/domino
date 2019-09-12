@@ -1,6 +1,7 @@
 import React from 'react';
 import classes from './Header.module.scss'
 import {withRouter} from 'react-router-dom';
+import Logo from '../Logo/Logo';
 import Navigation from '../Navigation/Navigation';
 import DrawerToggle from '../Navigation/Sidedrawer/DrawerToggle/DrawerToggle';
 
@@ -36,7 +37,7 @@ class Header extends React.Component {
             <header className={this.state.assignClass}>
                 <div className={classes.Container}>
                     <DrawerToggle open={this.props.toggle}/>
-                    <div className={classes.Logo}><span>דומינו</span></div>
+                    <Logo width="70px"/>
                     <nav className={classes.DesktopOnly}>
                         <Navigation />
                     </nav>

@@ -2,6 +2,7 @@ import React from 'react';
 import Navigation from '../Navigation';
 import classes from './SideDrawer.module.scss';
 import Backdrop from '../../../UI/Backdrop/Backdrop';
+import Logo from '../../Logo/Logo';
 
 const SideDrawer = (props) => {
     let sdClasses = [classes.SideDrawer, classes.Close];
@@ -12,7 +13,9 @@ const SideDrawer = (props) => {
         <>
             <Backdrop show={props.open} clicked={props.closed}/>
             <div className={sdClasses.join(' ')}>
-                <div className={classes.Logo}><span>דומינו</span></div>
+                <div className={classes.Logo}>
+                    <Logo width="70px" />
+                </div>
                 <Navigation />
             </div>
         </>

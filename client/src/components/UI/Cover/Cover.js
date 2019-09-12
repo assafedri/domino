@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Cover.module.scss';
+import Logo from '../../Layout/Logo/Logo';
 
 class Cover extends React.Component{
     state = {
@@ -22,8 +23,8 @@ class Cover extends React.Component{
         return(
             <section className={classes.Cover} style={{backgroundPositionY: this.state.positionY }}>
                 <div>
-                    <h1>ברוכים הבאים לאתר המעריצים של דומינו</h1>
-                    <p>כאן תוכלו למצוא את כל המערכונים הקיימים ברשת</p>
+                    <Logo width="auto" />
+                    <p>כל המערכונים, כל השחקנים, כל העונות - במקום אחד!</p>
                 </div>
             </section>
         )

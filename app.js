@@ -89,5 +89,4 @@ app.get('*', (req, res) => {
 // Server Listen -----------------------------------------------------------------------
 
 const API_PORT = process.env.PORT || 5000;
-const API_HOST = process.env.HOST || 'localhost'
-app.listen(API_PORT, API_HOST, () => console.log(`Listening on port ${API_PORT}`));
+app.listen(API_PORT, () => console.log(`Listening on port ${API_PORT}`));

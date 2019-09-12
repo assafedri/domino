@@ -10,8 +10,10 @@ const modal = (props) => (
             left: '50%',
             width: 'auto',
             maxWidth: '80%',
-            height: 'auto%',
             zIndex: 1000,
+            height: '100%',
+            maxHeight: '80vh',
+            overflow: 'auto',
             transform: props.show ? 'translate(-50%, -50%)' : 'translate(-50%,-100vh)',
             opacity: props.show ? '1': '0',
             transition: 'all 0.3s ease-out'
