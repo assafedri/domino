@@ -1,0 +1,47 @@
+@import '../../../assets/scss/global.scss';
+
+.Modal{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    max-width: calc(100% - 4em);
+    z-index: 1000;
+    height: auto;
+    max-height: 80vh;
+    overflow: hidden;
+    transition: all 0.3s ease-out;
+    background: rgba($brandColor, .5);
+    padding: 0.5em;
+
+    .Content{
+        position: relative;
+        padding: 2em;
+        background: $mainBkg;
+        overflow: auto;
+
+        > button{
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 10EM;
+            height: 10EM;
+            background: $brandColor;
+            border: none;
+            outline: none;
+            cursor: pointer;
+            transform: rotate(45deg) translateX(-70%);
+            display: flex;
+            z-index: 1;
+
+            svg{
+                font-size: 3.5em;
+                margin: 5px; 
+            }
+
+            &:hover{
+                background: darken($brandColor, 10%)
+            }
+        }   
+    }
+}

@@ -1,23 +1,24 @@
 import React from 'react';
 import Backdrop from '../Backdrop/Backdrop';
+import classes from './Modal.module.scss';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const modal = (props) => (
     <>
         <Backdrop show={props.show} clicked={props.modalClosed}/>
-        <div style={{
-            position: 'fixed',
-            top: '50%',
-            left: '50%',
-            width: 'auto',
-            maxWidth: '80%',
-            zIndex: 1000,
-            height: '100%',
-            maxHeight: '80vh',
-            overflow: 'auto',
+        <div className={classes.Modal} style={{
             transform: props.show ? 'translate(-50%, -50%)' : 'translate(-50%,-100vh)',
             opacity: props.show ? '1': '0',
-            transition: 'all 0.3s ease-out'
-        }}>{props.children}</div>
+        }}>
+            <div className={classes.Content}>
+                <button onClick={props.modalClosed}>
+                <FontAwesomeIcon icon={faPlus} onClick={props.modalClosed}/>
+                
+                </button>
+                {props.children}
+            </div>
+        </div>
     </>
 )
 

@@ -46,14 +46,17 @@
         }
 
         .Submenu{
-            display: none;
-            background: lighten($secBkg, 10%); 
+            background: lighten($lightBkg, 10%); 
             position: absolute;
             width: 100%;
             z-index: 900;
+            margin-bottom: 2em;
+            height: auto;
+            transition: all 1s ease;
+            overflow: hidden;
+            max-height: 0;
 
             .Option {
-
                 input{
                     display: none;
                 }
@@ -78,7 +81,7 @@
         }
 
         .Open + .Submenu{
-            display: block;
+            max-height: 50vh;
         }
     }
 }

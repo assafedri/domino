@@ -1,4 +1,5 @@
 import React, {useState, useEffect} from 'react';
+import { Link } from 'react-router-dom';
 import Input from '../../UI/Input/Input';
 import Button from '../../UI/Button/Button';
 import classes from './NewSkit.module.scss';
@@ -6,25 +7,24 @@ import Spinner from '../../UI/Spinner/Spinner';
 import axios from '../../../axios-domino';
 
 const NewSkit = () => {
-    const [loading, setLoading] = useState(false)
+    const [formState, setFormState] = useState('loading');
+    const [formError, setFormError] = useState();
+    const [skitLink, setSkitLink] = useState();
     const [fields, setFields] = useState({
         name: {
-            elmType: 'text',
-            value: '',
+            elmType: 'text', value: '',
             config: {
                 label: 'שם המערכון',
             }
         },
         youtube_id: {
-            elmType: 'text',
-            value: '',
+            elmType: 'text', value: '',
             config: {
                 label: 'מזהה Youtube',
             }
         },
         season: {
-            elmType: 'number',
-            value: '',
+            elmType: 'number', value: '',
             config: {
                 label: 'עונה',
                 min: 1,
@@ -33,8 +33,7 @@ const NewSkit = () => {
             }
         },
         episode: {
-            elmType: 'number',
-            value: '',
+            elmType: 'number', value: '',
             config: {
                 label: 'פרק',
                 min: 1,
@@ -54,8 +53,8 @@ const NewSkit = () => {
     })
 
     useEffect( () => {
-        console.log('effect');
         let isSubscribed = true;
+
         axios.get('api/cast')
         .then(response => {
             if(isSubscribed && !fields.cast.options){
@@ -70,16 +69,17 @@ const NewSkit = () => {
                 if(!fields.cast.config.options.length){
                     fieldsState.cast.config.options = castData;
                     setFields(fieldsState);
+                    setFormState('initial')
                 }
             }
         })
+
         return () => isSubscribed = false;
     },[fields])
 
     const inputChangesHandler = (e, id) => {
         const fieldsUpdate = {...fields}
         const etv = e.target.value;
-        
 
         if(fieldsUpdate[id].elmType === 'multiselect'){
             let multiValues = fieldsUpdate[id].value  
@@ -100,9 +100,10 @@ const NewSkit = () => {
         setFields(fieldsUpdate);
     }
 
-    const submutFormHandler = (e) => {
+    const submitFormHandler = (e) => {
         e.preventDefault();
-        setLoading(true);
+        setFormState('pending');
+  
         const formData = {
             name: fields.name.value,
             youtube_id: fields.youtube_id.value,
@@ -112,59 +113,105 @@ const NewSkit = () => {
             },
             actors: fields.cast.value
         }
-        
-        // eslint-disable-next-line
-        // for( let key in fields ){
-        //     formData[key] = fields[key].value;
-        // }
 
         axios.post('/api', formData)
             .then(response => {
-                setLoading(false)
+                setFormState('success');
+                setSkitLink(`/skits/view/${response.data.youtube_id}`)
             })
             .catch(error => {
-                setLoading(false)
-                console.log(error)
+                setFormState('failed')
+                setFormError(error.message);
             })
     }
 
-    let castHTML = <Spinner />
+    let formHTML = '';
 
-    if(fields.cast){
-        const formHTML = [];
-        // eslint-disable-next-line 
-        for(let key in fields){
-            formHTML.push({
-                id: key, 
-                data: fields[key]
-            })
-        }        
+    switch(formState){
+        case 'loading':
+                formHTML = <Spinner message="טוען טופס..." />;
+            break;
 
-        castHTML = 
-            <div className={classes.NewSkit}>
-                <h3>הוסף מערכון</h3>
+        case 'initial':
+            const formFileds = [];
+            // eslint-disable-next-line 
+            for(let key in fields){
+                formFileds.push({ id: key, data: fields[key]})
+            }
+
+            if(formFileds){
+                formHTML = (
+                    <>
+                        <h2>הוסף מערכון</h2>
+                        <form onSubmit={submitFormHandler}>
+                            {formFileds.map( elm => {
+                                return <Input 
+                                    key={elm.id}
+                                    name={`skit[${elm.id}]`}
+                                    changed={(e) =>inputChangesHandler(e, elm.id)}
+                                    elmType={elm.data.elmType}
+                                    value={elm.data.value}
+                                    config={elm.data.config}/>
+                            })}
+                            <Button type="submit" design="Success">הוסף</Button>
+                        </form>
+                    </>
+                );
+            }else{
+                formHTML = 'שגיאה בטעינת הטופס';
+            }
+
+            break;
+
+        case 'pending':
+            formHTML = <Spinner message="שולח טופס..."/>
+            break;
+
+        case 'success':
+            formHTML = (
+                <>
+                    <p>המערכון נוסף בהצלחה</p>
+                    <Link to={skitLink}>לחץ כאן למעבר לעמוד המערכון</Link>
+                </>
+            )
+
+            break;
+
+        case 'failed':
+                formHTML = (
+                    <>
+                        <p>שגיאה:</p>
+                        <p>{formError}</p>
+                    </>
+                )
+            break;
+
+        default:
+
+    }
+
+    // let formHTML = <Spinner message="טוען טופס..." />
+
+    // if(!fields.cast){
+    //     const castOptions = [];
+
+    //     // eslint-disable-next-line 
+    //     for(let key in fields){
+    //         castOptions.push({ id: key, data: fields[key]})
+    //     }        
+
+    //     formHTML = 
+    //         <>
                 
-                <form onSubmit={submutFormHandler}>
-                    {formHTML ? formHTML.map( elm => {
-                        return <Input 
-                            key={elm.id}
-                            name={`skit[${elm.id}]`}
-                            changed={(e) =>inputChangesHandler(e, elm.id)}
-                            elmType={elm.data.elmType}
-                            value={elm.data.value}
-                            config={elm.data.config}/>
-                    }) : null }
+    //             <Button design="Danger" clicked={() => setLoading(!loading)}>toggle</Button>
+    //         </>
+    // }
 
-
-                    <Button type="submit" design="Success" disabled={loading}>
-                        {loading ? <Spinner message="שומר..."/> : 'הוסף'}
-                    </Button>
-                </form>
-                <Button design="Danger" clicked={() => setLoading(!loading)}>toggle</Button>
-            </div>
-    }
-
-    return castHTML;
+    return(
+        <div className={classes.NewSkit}>
+            {formHTML}
+        </div>
+    );
 }
 
 export default NewSkit;

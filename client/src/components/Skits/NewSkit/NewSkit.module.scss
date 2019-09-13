@@ -1,11 +1,14 @@
 @import '../../../assets/scss/global.scss';
 
 .NewSkit{
-    background: $secBkg;
-    padding: 1em;
-    margin: 1em 0;
     width: 400px;
     max-width: 100%;
+    height: inherit;
+    text-align: right;
+
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
 
     form{
         display: grid;
