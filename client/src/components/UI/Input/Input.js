@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import classes from './Input.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+
 const Input = (props) => {
     let elm = null;
     const [numSelected, setNumselected] = useState(0)
@@ -21,6 +22,14 @@ const Input = (props) => {
         }
     }
 
+    let inputClasses = [classes.Input];
+    let ErrorMsg = ''
+
+    if(!props.valid && props.shouldValidate && props.touched){
+        inputClasses.push(classes.Invalid)
+        ErrorMsg = 'שדה חובה';
+    }
+
     switch(props.elmType){
         case('text'):
         case('number'):
@@ -34,7 +43,9 @@ const Input = (props) => {
             break;
 
         case('textarea'):
-            elm = <textarea {...props}/>
+            elm = <textarea 
+                {...props}
+                />
             break;
 
         case('multiselect'):
@@ -44,10 +55,11 @@ const Input = (props) => {
             }else if(numSelected > 1){
                 multiSelectTitle = <strong>{numSelected} נבחרו</strong>
             }
+            inputClasses.push(classes.MultiSelect)
 
             elm = (
                 <>
-                <div className={classes.MultiSelect} onClick={selectClickHandler}>
+                <div onClick={selectClickHandler}>
                     <div className={classes.Title}>
                         {multiSelectTitle}
                         <FontAwesomeIcon icon={faCaretDown} />
@@ -74,9 +86,10 @@ const Input = (props) => {
     }
 
     return(
-        <div className={classes.Input}>
+        <div className={inputClasses.join(' ')}>
             {props.config ? <label>{props.config.label}</label> : null}
             {elm}
+            <p className={classes.ErrorMsg}>{ErrorMsg}</p>
         </div>
     )
 }

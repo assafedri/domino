@@ -32,7 +32,18 @@
         @include field;
     }
 
-    .MultiSelect{
+    &.Invalid{
+        input{
+            border: 1px solid $dangerColor;
+        }  
+    }
+
+    .ErrorMsg {
+        color: $dangerColor;
+        min-height: 1.5em;
+    }
+
+    &.MultiSelect{
         cursor: pointer;
         position: relative;
 
@@ -43,6 +54,13 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+        }
+
+        &.Invalid{
+            .Title{
+                color: $dangerColor;
+                border: 1px solid $dangerColor;
+            }
         }
 
         .Submenu{

@@ -20,7 +20,7 @@ class Cover extends React.Component{
     }
 
     scrollHandler = (e) => {
-        this.setState({positionY: 50 + (window.pageYOffset * 0.05) + '%'})
+        this.setState({positionY: 50 + (window.pageYOffset * 0.03) + '%'})
     }
 
     render(){

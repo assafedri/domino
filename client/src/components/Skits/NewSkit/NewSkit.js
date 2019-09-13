@@ -8,6 +8,7 @@ import axios from '../../../axios-domino';
 
 const NewSkit = () => {
     const [formState, setFormState] = useState('loading');
+    const [formSubmitable, setFormSubmitable] = useState(false);
     const [formError, setFormError] = useState();
     const [skitLink, setSkitLink] = useState();
     const [fields, setFields] = useState({
@@ -15,13 +16,23 @@ const NewSkit = () => {
             elmType: 'text', value: '',
             config: {
                 label: 'שם המערכון',
-            }
+            },
+            validation: {
+                required: true
+            },
+            valid: false,
+            touched: false,
         },
         youtube_id: {
             elmType: 'text', value: '',
             config: {
                 label: 'מזהה Youtube',
-            }
+            },
+            validation: {
+                required: true
+            },
+            valid: false,
+            touched: false,
         },
         season: {
             elmType: 'number', value: '',
@@ -30,7 +41,12 @@ const NewSkit = () => {
                 min: 1,
                 step: 1,
                 max: 4
-            }
+            },
+            validation: {
+                required: true
+            },
+            valid: false,
+            touched: false
         },
         episode: {
             elmType: 'number', value: '',
@@ -39,7 +55,12 @@ const NewSkit = () => {
                 min: 1,
                 step: 1,
                 max: 18
-            }
+            },
+            validation: {
+                required: true
+            },
+            valid: false,
+            touched: false
         },
         cast: {
             elmType: 'multiselect',
@@ -48,7 +69,12 @@ const NewSkit = () => {
                 label: 'משתתפים',
                 title: 'בחר שחקנים',
                 options: []
-            }
+            },  
+            validation: {
+                atLeast: 2
+            },
+            valid: false,
+            touched: false
         }
     })
 
@@ -77,6 +103,20 @@ const NewSkit = () => {
         return () => isSubscribed = false;
     },[fields])
 
+    const checkValidity = (value, rules) => {
+        let isValid = true;
+
+        if(rules.required && isValid){
+            isValid = value.trim() !== ''
+        }
+
+        if(rules.atLeast && isValid){
+            isValid = value.length >= rules.atLeast;
+        }
+
+        return isValid;
+    }
+
     const inputChangesHandler = (e, id) => {
         const fieldsUpdate = {...fields}
         const etv = e.target.value;
@@ -96,8 +136,17 @@ const NewSkit = () => {
         }else{
             fieldsUpdate[id].value = e.target.value;
         }
+        fieldsUpdate[id].touched = true;
+        fieldsUpdate[id].valid = checkValidity(fieldsUpdate[id].value, fieldsUpdate[id].validation)
+
+        let formIsValid = true;
+        // eslint-disable-next-line
+        for(let id in fieldsUpdate){
+            formIsValid = fieldsUpdate[id].valid && formIsValid;
+        }
 
         setFields(fieldsUpdate);
+        setFormSubmitable(formIsValid);
     }
 
     const submitFormHandler = (e) => {
@@ -151,9 +200,13 @@ const NewSkit = () => {
                                     changed={(e) =>inputChangesHandler(e, elm.id)}
                                     elmType={elm.data.elmType}
                                     value={elm.data.value}
-                                    config={elm.data.config}/>
+                                    config={elm.data.config}
+                                    valid={elm.data.valid}
+                                    shouldValidate={elm.data.validation}
+                                    touched={elm.data.touched}
+                                    />
                             })}
-                            <Button type="submit" design="Success">הוסף</Button>
+                            <Button type="submit" design="Success" disabled={!formSubmitable}>הוסף</Button>
                         </form>
                     </>
                 );
@@ -174,7 +227,6 @@ const NewSkit = () => {
                     <Link to={skitLink}>לחץ כאן למעבר לעמוד המערכון</Link>
                 </>
             )
-
             break;
 
         case 'failed':
@@ -189,23 +241,6 @@ const NewSkit = () => {
         default:
 
     }
-
-    // let formHTML = <Spinner message="טוען טופס..." />
-
-    // if(!fields.cast){
-    //     const castOptions = [];
-
-    //     // eslint-disable-next-line 
-    //     for(let key in fields){
-    //         castOptions.push({ id: key, data: fields[key]})
-    //     }        
-
-    //     formHTML = 
-    //         <>
-                
-    //             <Button design="Danger" clicked={() => setLoading(!loading)}>toggle</Button>
-    //         </>
-    // }
 
     return(
         <div className={classes.NewSkit}>
