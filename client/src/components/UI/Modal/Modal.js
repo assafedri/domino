@@ -12,12 +12,12 @@ const modal = (props) => (
             opacity: props.show ? '1': '0',
         }}>
             <div className={classes.Content}>
-                <button onClick={props.modalClosed}>
+                {props.children}
+            </div>
+            <button onClick={props.modalClosed}>
                 <FontAwesomeIcon icon={faPlus} onClick={props.modalClosed}/>
                 
                 </button>
-                {props.children}
-            </div>
         </div>
     </>
 )
