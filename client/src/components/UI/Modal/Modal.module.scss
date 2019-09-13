@@ -4,32 +4,24 @@
     position: fixed;
     top: 50%;
     left: 50%;
-    width: auto;
-    max-width: calc(100% - 4em);
+    transform: translate(-50%, -50%);
     z-index: 1000;
-    height: auto;
-    min-height: 50vh;
-    max-height: 80vh;
+    background: $mainBkg;
     overflow: hidden;
-    transition: all 0.3s ease-out;
-    background: rgba($brandColor, .5);
-    padding: 0.5em;
-    display: flex;
+    max-width: calc(100% - 2em);
+    padding: 1em;
 
-    .Content{
-        
-        padding: 2em;
-        background: $mainBkg;
-        overflow: hidden;
-        overflow-y: auto;
+    .Content {
+        overflow: auto;
+        max-height: calc(100vh - 4em);
     }
 
     > button{
         position: absolute;
         top: 0;
         left: 0;
-        width: 10EM;
-        height: 10EM;
+        width: 10em;
+        height: 10em;
         background: $brandColor;
         border: none;
         outline: none;
