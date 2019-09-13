@@ -15,10 +15,16 @@
         grid-template-columns: 1fr 1fr;
         justify-items: start;
         text-align: inherit;
+    }
 
-        button{
+    svg{
+        margin-left: 1em;
+    }
+
+    button{
+        @media($breakpoint1){
             justify-self: end;
-        }    
+        }
     }
 
     .Skitlist{

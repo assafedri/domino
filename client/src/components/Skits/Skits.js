@@ -10,8 +10,8 @@ import Input from '../UI/Input/Input';
 import Button from '../UI/Button/Button';
 
 import classes from './Skits.module.scss';
-
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
 
 const Skitlist = (props) => {
     const [filtered, setFiltered] = useState(props.skits);
@@ -56,7 +56,10 @@ const Skitlist = (props) => {
             <section className={classes.Skits}>
                 {props.title ? <h2>{props.title} ({filtered.length})</h2> : null}
 
-                <Button design="Warning" clicked={addSkitHandler}>הוסף מערכון</Button>
+                <Button design="Warning" clicked={addSkitHandler}>
+                    <FontAwesomeIcon icon={faPlus} />
+                    הוסף מערכון
+                </Button>
                 <Route path="/skits/add" exact render={ () => {
                     return <Modal show={expand.show} modalClosed={addSkitFormCloseHandeler}>
                         <NewSkit />
