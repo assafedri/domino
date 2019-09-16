@@ -6,9 +6,12 @@ const methodOverride = require('method-override');
 const cors           = require('cors');
 
 const Skit      = require('./models/skit');
-const Actor     = require('./models/actor');
+
 const Comment   = require('./models/comment');
 // const User      = require('./models/user');
+
+skitsRoutes         = require('./routes/skits');
+castRoutes          = require('./routes/cast');
 
 
 // DB Connection ---------------------------------------------------------------------
@@ -32,61 +35,10 @@ app.use(express.json());
 
 console.log(path.join(__dirname, './client/build'))
 
-// Express routes ----------------------------------------------------------------------
-app.get('/api', async(req,res) => {
-    const allSkits = await Skit.find({}).sort({'aired.season': 1, 'aired.episode': 1})
-    res.json(allSkits);
-})
-
-app.post('/api', async(req,res) => {
-    try{
-        let createdSkit = await Skit.create(req.body);
-        for(actor of createdSkit.actors){
-            let foundActor = await Actor.findById(actor);
-            foundActor.skits.push(createdSkit)
-            foundActor.save();
-        }
-
-        res.json(createdSkit)
-
-    }catch{error => console.log(error)}
-})
-
-app.get('/api/skits/:id', (req,res) => {
-    Skit.findOne({youtube_id: req.params.id})
-        .populate('comments')
-        .populate('actors')
-        .exec( (error, skit) => {
-            if(error || !skit) {
-                res.status(404)
-                res.json({error: error});
-            }else{
-                res.json(skit);
-            }
-        })
-    })
-
-app.get('/api/cast', async(req,res) => {
-    const allCast = await Actor.find({}).sort({'name': 1}).populate('skits')
-    res.json(allCast);
-})
-
-app.get('/api/cast/:id', (req,res) => {
-    Actor.findById(req.params.id)
-        .populate('skits')
-        .exec( (error, actor) => {
-            if(error || !actor) {
-                res.status(404)
-            }else{
-                res.json(actor);
-            }
-        })
-})
-
-app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname+'/client/build/index.html'));
-});
-
+// Routes ----------------------------------------------------------------------
+app.use('/api/skits', skitsRoutes);
+app.use('/api/cast', castRoutes);
+app.get('*', (req, res) => res.sendFile(path.join(__dirname+'/client/build/index.html')));
 
 // Server Listen -----------------------------------------------------------------------
 

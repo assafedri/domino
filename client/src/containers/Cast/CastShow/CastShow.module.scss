@@ -1,6 +1,6 @@
-@import '../../assets/scss/global.scss';
+@import '../../../assets/scss/global.scss';
 
-.CastMember{
+.CastShow{
     @include container();
     display: grid;
     grid-template-columns: 1fr;

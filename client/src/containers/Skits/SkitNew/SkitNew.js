@@ -1,12 +1,15 @@
 import React, {useState, useEffect} from 'react';
 import { Link } from 'react-router-dom';
-import Input from '../../UI/Input/Input';
-import Button from '../../UI/Button/Button';
-import classes from './NewSkit.module.scss';
-import Spinner from '../../UI/Spinner/Spinner';
 import axios from '../../../axios-domino';
 
-const NewSkit = () => {
+import Input from '../../../components/UI/Input/Input';
+import Button from '../../../components/UI/Button/Button';
+import Spinner from '../../../components/UI/Spinner/Spinner';
+
+import classes from './SkitNew.module.scss';
+
+
+const SkitNew = () => {
     const [formState, setFormState] = useState('loading');
     const [formSubmitable, setFormSubmitable] = useState(false);
     const [formError, setFormError] = useState();
@@ -163,10 +166,10 @@ const NewSkit = () => {
             actors: fields.cast.value
         }
 
-        axios.post('/api', formData)
+        axios.post('/api/skits/', formData)
             .then(response => {
                 setFormState('success');
-                setSkitLink(`/skits/view/${response.data.youtube_id}`)
+                setSkitLink(`/skits/${response.data.youtube_id}`)
             })
             .catch(error => {
                 setFormState('failed')
@@ -191,7 +194,6 @@ const NewSkit = () => {
             if(formFileds){
                 formHTML = (
                     <>
-                        <h2>הוסף מערכון</h2>
                         <form onSubmit={submitFormHandler}>
                             {formFileds.map( elm => {
                                 return <Input 
@@ -243,10 +245,11 @@ const NewSkit = () => {
     }
 
     return(
-        <div className={classes.NewSkit}>
+        <div className={classes.SkitNew}>
+            <h1>הוספת מערכון חדש</h1>
             {formHTML}
         </div>
     );
 }
 
-export default NewSkit;
+export default SkitNew;

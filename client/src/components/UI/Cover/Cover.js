@@ -1,6 +1,6 @@
 import React from 'react';
 import classes from './Cover.module.scss';
-import Logo from '../../Layout/Logo/Logo';
+import Logo from '../../../containers/Layout/Logo/Logo';
 
 import originals from '../../../assets/img/originals.jpg';
 import nextGen from '../../../assets/img/next-gen.jpg';

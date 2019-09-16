@@ -3,7 +3,7 @@ import './Footer.module.scss';
 
 const Footer = () => (
     <footer>
-        <p>כל הזכויות שמורות לכושלי</p>
+        <p>כל הזכויות שמורות ליוצרים</p>
     </footer>
 )
 

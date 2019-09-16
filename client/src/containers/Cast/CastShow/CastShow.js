@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Skits from '../../components/Skits/Skits';
-import classes from './CastMember.module.scss';
+import { connect } from 'react-redux';
+import Skits from '../../../components/Skits/Skits';
+import classes from './CastShow.module.scss';
 
-class CastMember extends React.Component{
+class CastShow extends React.Component{
     state = {
         member: {},
         loading: true
@@ -14,7 +15,7 @@ class CastMember extends React.Component{
     }
 
     getCastMemberData = (id) => {
-        fetch(`http://localhost:3001/cast/${id}`)
+        fetch(`/api/cast/${id}`)
             .then( data => data.json() )
             .then( results => this.setState({member: results, loading: false}) )
     }
@@ -31,7 +32,7 @@ class CastMember extends React.Component{
 
                     <section className={classes.title}>
                         <h1>{this.state.member.name}</h1>
-                        <p>{this.state.member.team}</p>
+                        <p>{this.props.team_labels[this.state.member.team]}</p>
                     </section>
 
                     <section className={classes.admin}>
@@ -51,11 +52,16 @@ class CastMember extends React.Component{
         }
         
         return(
-            <div className={classes.CastMember}>
+            <div className={classes.CastShow}>
                 {pageContent}
             </div>
         )
     }
 }
 
-export default CastMember;
+const mapStateToProps = state => {
+    return {
+        team_labels: state.team_labels
+    }
+}
+export default connect(mapStateToProps)(CastShow);

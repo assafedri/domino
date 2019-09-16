@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
-import { withRouter, Route } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 
 import Skit from './Skit/Skit';
 import Expand from './Skit/Expand/Expand';
-import NewSkit from './NewSkit/NewSkit';
 
 import Modal from '../UI/Modal/Modal';
 import Input from '../UI/Input/Input';
@@ -30,11 +29,6 @@ const Skitlist = (props) => {
 
     const skitClickHandler = (e, skit) => setExpand({show: true, item: skit});
     const skitViewCloseHandler = () => setExpand({show: false, item: null});
-    
-    const addSkitFormCloseHandeler = () => {
-        setExpand({show: false, item: null})
-        props.history.push('/skits');
-    }
 
     const filterhandler = e => {
         const etv = e.target.value;
@@ -60,11 +54,6 @@ const Skitlist = (props) => {
                     <FontAwesomeIcon icon={faPlus} />
                     הוסף מערכון
                 </Button>
-                <Route path="/skits/add" exact render={ () => {
-                    return <Modal show={expand.show} modalClosed={addSkitFormCloseHandeler}>
-                        <NewSkit />
-                    </Modal>
-                }}/>
 
                 <Input 
                     elmType="text"

@@ -1,0 +1,10 @@
+@import '../../assets/scss/global.scss';
+
+.PageNotFound{
+    @include container();
+    text-align: center;
+
+    h1{
+        font-size: 5em;
+    }
+}

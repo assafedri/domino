@@ -20,7 +20,7 @@ const Expand = (props) => (
                 episode={props.skit.aired.episode} />
             <p className={classes.Desc}>{props.skit.description}</p>
             <Button design="Warning">
-                <Link to={`/skits/view/${props.skit.youtube_id}`}>לעמוד המערכון</Link>
+                <Link to={`/skits/${props.skit.youtube_id}`}>לעמוד המערכון</Link>
             </Button>
         </div>
 

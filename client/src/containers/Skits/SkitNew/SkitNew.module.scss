@@ -1,8 +1,7 @@
 @import '../../../assets/scss/global.scss';
 
-.NewSkit{
-    width: 400px;
-    max-width: 100%;
+.SkitNew{
+    @include narrow-container(); 
     text-align: right;
 
     display: flex;

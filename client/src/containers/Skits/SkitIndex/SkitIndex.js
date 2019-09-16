@@ -1,10 +1,11 @@
 import React from 'react';
-import Cover from '../../components/UI/Cover/Cover'; 
-import Skits from '../../components/Skits/Skits';
-import Spinner from '../../components/UI/Spinner/Spinner';
-import axios from '../../axios-domino';
+import axios from '../../../axios-domino';
 
-class SkitsPage extends React.Component{
+import Cover from '../../../components/UI/Cover/Cover'; 
+import Skits from '../../../components/Skits/Skits';
+import Spinner from '../../../components/UI/Spinner/Spinner';
+
+class SkitIndex extends React.Component{
     state = {
         error: false,
         loading: false,
@@ -14,7 +15,7 @@ class SkitsPage extends React.Component{
     componentDidMount(){
         this.setState({loading: true})
 
-        axios.get('api/')
+        axios.get('api/skits/')
             .then( response => {
                 this.setState({
                     allSkits: response.data,
@@ -45,4 +46,4 @@ class SkitsPage extends React.Component{
     }
 }
 
-export default SkitsPage;
+export default SkitIndex;

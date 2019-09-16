@@ -1,19 +1,22 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import classes from './SkitPage.module.scss'; 
-import axios from '../../axios-domino';
-import {withRouter} from 'react-router-dom';
+import axios from '../../../axios-domino';
+import {withRouter, Link} from 'react-router-dom';
 
-import YoutubeVideo from '../../components/Skits/Skit/YoutubeVideo/YoutubeVideo';
-import Aired from '../../components/Skits/Skit/Aired/Aired';
-import Comments from '../../components/Skits/Skit/Comments/Comments';
-import Cast from '../../components/Cast/Cast';
-import Spinner from '../../components/UI/Spinner/Spinner';
+import YoutubeVideo from '../../../components/Skits/Skit/YoutubeVideo/YoutubeVideo';
+import Aired from '../../../components/Skits/Skit/Aired/Aired';
+import Comments from '../../../components/Skits/Skit/Comments/Comments';
+import Cast from '../../../components/Cast/Cast';
+import Spinner from '../../../components/UI/Spinner/Spinner';
+import Button from '../../../components/UI/Button/Button';
 
-class SkitPage extends React.Component{
+import classes from './SkitShow.module.scss'; 
+import PageNotFound from '../../PageNotFound/PageNotFound';
+
+class SkitShow extends React.Component{
     state = {
         skit: {},
-        loading: true
+        loading: true,
+        error: false
     }
 
     componentDidMount(){
@@ -26,6 +29,8 @@ class SkitPage extends React.Component{
             if(response.status === 200){
                 this.setState({skit: response.data, loading: false})
             }
+        }).catch(error => {
+            this.setState({error: error.message})
         })
     }
 
@@ -34,8 +39,23 @@ class SkitPage extends React.Component{
         this.props.history.push('/cast/' + targetId);
     }
 
+    deleteSkitHandler = (e) => {
+        e.preventDefault();
+        const skitId = this.state.skit._id;
+        
+        if(window.confirm('האם אתה בטוח?')){
+            axios.delete(`/api/skits/${skitId}`)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+        }
+    }
+
     render(){
         let pageContent = <Spinner message="טוען מערכון..."/>;
+
+        if(this.state.error){
+            pageContent = <PageNotFound message="המערכון לא נמצא"/>
+        }
         
         if(!this.state.loading){
             pageContent = (
@@ -44,9 +64,11 @@ class SkitPage extends React.Component{
                         <YoutubeVideo id={this.state.skit.youtube_id} />
                     </section>
                     <section className={classes.admin}>
-                        <Link to="">ערוך</Link> 
-                        <form>
-                            <button type="submit">מחק</button>
+                        <Button design="Warning">
+                            <Link to={`/skits/${this.state.skit.youtube_id}/edit`}>ערוך</Link>
+                        </Button>
+                        <form onSubmit={this.deleteSkitHandler}>
+                            <Button design="Danger">מחק</Button>
                         </form>
                     </section>
                     <h1>{this.state.skit.name}</h1>
@@ -80,11 +102,11 @@ class SkitPage extends React.Component{
             )
         }
         return(
-            <div className={classes.Skit}>
+            <div className={classes.SkitShow}>
                 {pageContent}
             </div>
         )
     }
 }
 
-export default withRouter(SkitPage);
+export default withRouter(SkitShow);
