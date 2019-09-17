@@ -21,6 +21,10 @@ $footerHeight: 70;
     max-width: 1600px;
     margin: 0 auto;
     padding: 1em;
+
+    h1 {
+        margin: 0 0 1em;
+    }
 }
 
 @mixin narrow-container() {

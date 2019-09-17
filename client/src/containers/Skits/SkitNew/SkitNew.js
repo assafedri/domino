@@ -1,6 +1,7 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useCallback} from 'react';
 import { Link } from 'react-router-dom';
 import axios from '../../../axios-domino';
+import { connect } from 'react-redux';
 
 import Input from '../../../components/UI/Input/Input';
 import Button from '../../../components/UI/Button/Button';
@@ -9,7 +10,7 @@ import Spinner from '../../../components/UI/Spinner/Spinner';
 import classes from './SkitNew.module.scss';
 
 
-const SkitNew = () => {
+const SkitNew = (props) => {
     const [formState, setFormState] = useState('loading');
     const [formSubmitable, setFormSubmitable] = useState(false);
     const [formError, setFormError] = useState();
@@ -81,30 +82,52 @@ const SkitNew = () => {
         }
     })
 
+    const convertCastData = useCallback((cast) => {
+     
+            const castData = [];
+            cast.map( group => {
+                const groupMembers = group.data.map( member => {
+                    return { id: member._id, name: member.name, value: member._id}
+                })
+                
+                return castData[group.id] = { label: group.label, members: groupMembers }
+            })
+
+            return castData;
+            
+    },[])
+
+    const updateCastState = useCallback((castData) => {
+        return {
+            ...fields,
+            cast: {
+                ...fields.cast,
+                config: {
+                    ...fields.cast.config,
+                    options: castData
+                }
+            }
+        }
+    },[fields])
+
+
     useEffect( () => {
         let isSubscribed = true;
 
-        axios.get('api/cast')
-        .then(response => {
-            if(isSubscribed && !fields.cast.options){
-                const castData = response.data.map( member => {
-                    return {
-                        id: member._id,
-                        name: member.name,
-                        value: member._id
-                    }
-                } )
-                const fieldsState = {...fields}
-                if(!fields.cast.config.options.length){
-                    fieldsState.cast.config.options = castData;
-                    setFields(fieldsState);
-                    setFormState('initial')
-                }
+        if(isSubscribed && props.cast && fields.cast.config.options.length < 1){
+            // const convertedData = convertCastData(props.cast);
+            const updatedState = updateCastState(props.cast);
+            console.log(updatedState.cast.config.options)
+            if(updatedState.cast.config.options){
+                
+                setFields(updatedState);
+                setFormState('initial')
+
             }
-        })
+        }
 
         return () => isSubscribed = false;
-    },[fields])
+    },[convertCastData, updateCastState, props.cast,fields.cast.config.options])
 
     const checkValidity = (value, rules) => {
         let isValid = true;
@@ -208,7 +231,7 @@ const SkitNew = () => {
                                     touched={elm.data.touched}
                                     />
                             })}
-                            <Button type="submit" design="Success" disabled={!formSubmitable}>הוסף</Button>
+                            <Button type="submit" design="Success" size="xl" disabled={!formSubmitable}>הוסף</Button>
                         </form>
                     </>
                 );
@@ -252,4 +275,12 @@ const SkitNew = () => {
     );
 }
 
-export default SkitNew;
+const mapStateToProps = state => {
+    return {
+        team_labels: state.team_labels,
+        cast: state.cast,
+        error: state.error
+    }
+}
+
+export default connect(mapStateToProps)(SkitNew);

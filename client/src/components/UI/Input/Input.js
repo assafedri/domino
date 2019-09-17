@@ -1,7 +1,5 @@
 import React, {useState} from 'react';
 import classes from './Input.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 
 const Input = (props) => {
     let elm = null;
@@ -12,17 +10,18 @@ const Input = (props) => {
     }
     
     const optionMarkHandler = (e) => {
-        const et = e.target;
-        if(et.classList.contains(classes.Selected)){
-            et.classList.remove(classes.Selected)
+        console.log(e.target)
+        const etcl = e.target.classList;
+        if(etcl.contains(classes.Selected)){
+            etcl.remove(classes.Selected)
             setNumselected( numSelected - 1 )
         }else{
-            et.classList.add(classes.Selected)
+            etcl.add(classes.Selected)
             setNumselected( numSelected + 1 )
         }
     }
 
-    let inputClasses = [classes.Input];
+    let inputClasses = [];
     let ErrorMsg = ''
 
     if(!props.valid && props.shouldValidate && props.touched){
@@ -33,13 +32,17 @@ const Input = (props) => {
     switch(props.elmType){
         case('text'):
         case('number'):
-            elm = <input 
-            onChange={props.changed}
-            type={props.elmType}
-            value={props.value}
-            name={props.name}
-            placeholder={props.placeholder}
-            {...props.config}/>
+            inputClasses.push(classes.Input)
+            elm = (
+                <>
+                    <input 
+                        onChange={props.changed}
+                        type={props.elmType}
+                        value={props.value}
+                        {...props.config}/>
+                    {props.config ? <label>{props.config.label}</label> : null}       
+                </>
+            ) 
             break;
 
         case('textarea'):
@@ -61,15 +64,23 @@ const Input = (props) => {
                 <>
                 <div onClick={selectClickHandler}>
                     <div className={classes.Title}>
-                        {multiSelectTitle}
-                        <FontAwesomeIcon icon={faCaretDown} />
+                        {multiSelectTitle} 
                     </div>
                     <div className={classes.Submenu}>
-                        {props.config.options.map( opt => {
+                        {props.config.options.map( group => {
                             return(
-                                <div className={classes.Option} key={opt.id}>
-                                    <input type="checkbox" id={opt.id} name={props.name} value={opt.id} onChange={props.changed}/>
-                                    <label htmlFor={opt.id} onClick={optionMarkHandler}>{opt.name}</label>
+                                <div key={group.id} className={classes.Group}>
+                                    <div className={classes.Title}>{group.label}</div>
+                                    {group.data.map(member => {
+                                        return(
+                                            <div className={classes.Member} key={member._id}>
+                                                <input type="checkbox" id={member._id} name={props.name} value={member._id} onChange={props.changed}/>
+                                                <label htmlFor={member._id} onClick={optionMarkHandler}>
+                                                    {member.name}
+                                                </label>
+                                            </div>
+                                        )
+                                    })}
                                 </div>
                             )
                         })}
@@ -86,11 +97,16 @@ const Input = (props) => {
     }
 
     return(
+        <>
         <div className={inputClasses.join(' ')}>
-            {props.config ? <label>{props.config.label}</label> : null}
-            {elm}
-            <p className={classes.ErrorMsg}>{ErrorMsg}</p>
+            <div className={classes.Control}>
+                {elm}
+            </div>
+            <div className={classes.ErrorMsg}>
+                <p>{ErrorMsg}</p>
+            </div>
         </div>
+        </>
     )
 }
 

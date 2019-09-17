@@ -19,7 +19,28 @@ export const initCast = () => {
     return dispatch => {
         axios.get('api/cast')
             .then(response => {
-                dispatch(setCast(response.data))
+                const team_labels = {
+                    'originals': 'הצוות המקורי',
+                    'next-gen': 'הדור הבא',
+                    'guests': 'אורחים'
+                }
+                let castGroupsArray = [];
+                const castGroupsObject = response.data.reduce( (teams,current) => {
+                    const team = current.team;
+                    teams[team] = (teams[team] || []).concat(current);
+                    return teams;
+                },[]);
+                // eslint-disable-next-line 
+                for(let key in castGroupsObject){
+                    castGroupsArray.push({
+                        id: key, 
+                        label: team_labels[key],
+                        data: castGroupsObject[key]
+                    })
+                }
+                
+                
+                dispatch(setCast(castGroupsArray))
             })
             .catch( error => {
                 dispatch(fetchCastFailed(error))

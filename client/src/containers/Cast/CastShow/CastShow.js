@@ -32,7 +32,7 @@ class CastShow extends React.Component{
 
                     <section className={classes.title}>
                         <h1>{this.state.member.name}</h1>
-                        <p>{this.props.team_labels[this.state.member.team]}</p>
+                        <p>{this.state.member.team}</p>
                     </section>
 
                     <section className={classes.admin}>

@@ -1,11 +1,6 @@
 import * as actionTypes from '../actions/actionTypes';
 
 const initialState = {
-    team_labels: {
-        'originals': 'הצוות המקורי',
-        'next-gen': 'הדור הבא',
-        'guests': 'אורחים'
-    },
     cast: null,
     error: false
 }

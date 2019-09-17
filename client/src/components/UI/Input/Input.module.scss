@@ -1,105 +1,95 @@
 @import '../../../assets/scss/global.scss';
 
-@mixin field {
-    border: 1px solid white;
-    background: transparent;
-    color: white;
-    height: 3em;
-    font-size: 1em;
-    width: 100%;
-    max-width: 400px;
-    padding: 1em;
-    box-sizing: border-box;
+.Input{
+    .Control{
+        background: $lightBkg;
+        border-radius: 5px;
+        position: relative;
+        height: 3.5em;
 
-    &:focus{
-        border-color: $brandColor;
-        outline: none;
+        input{
+            width: 100%;
+            background: transparent;
+            height: 100%;
+            font-size: inherit;
+            outline: none;
+            border: none;
+            padding: 1.5em 15px 0;
+        }
+
+        > label{
+            color: $brandColor;
+            position: absolute;
+            transition: all 0.3s ease;
+        }
+
+        input:valid + label{
+            top: 50%;
+            right: 15px;
+            transform: translateY(-50%);
+        }
+
+        input:focus + label,
+        input:not([value=""]) + label{
+            top: 5px;
+            transform: translateY(0);
+            font-size: 0.85em;
+        }
+    }
+
+    .ErrorMsg{
+        p{
+            color: $dangerColor;
+        }
     }
 }
 
-.Input{
-    width: 100%;
-    font-size: 1em;
-
-    label{
-        display: block;
-        font-size: 0.9em;
-        color: $brandColor;
-        margin: 0 0 0.25em;
-    }
-
-    input{
-        @include field;
-    }
-
-    &.Invalid{
+.MultiSelect{
+    .Control{
         input{
-            border: 1px solid $dangerColor;
-        }  
-    }
-
-    .ErrorMsg {
-        color: $dangerColor;
-        min-height: 1.5em;
-    }
-
-    &.MultiSelect{
-        cursor: pointer;
-        position: relative;
-
-        .Title{
-            @include field;
-            padding: 0 1em;
-            line-height: 3em;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        &.Invalid{
-            .Title{
-                color: $dangerColor;
-                border: 1px solid $dangerColor;
-            }
+            display: none;
         }
 
         .Submenu{
-            background: lighten($lightBkg, 10%); 
-            position: absolute;
-            width: 100%;
-            z-index: 900;
-            margin-bottom: 2em;
-            height: auto;
-            transition: all 1s ease;
-            overflow: hidden;
-            max-height: 0;
+            display: grid;
+            grid-gap: 1em;
 
-            .Option {
-                input{
-                    display: none;
+            .Group{
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+                position: relative;
+                
+                .Title{
+                    width: 100%;
+                    color: $brandColor;
+                    text-align: center;
+
                 }
 
-                label{
-                    color: #fff;
-                    margin: 0;
-                    padding: 10px;
-                    cursor: pointer;
+                .Member{
+                    margin: 0.5em;
 
-                    &.Selected{
+                    &:hover{
                         color: $brandColor;
                     }
-                }
 
-                &:hover{
                     label{
-                        color: $brandColor;
+                        padding: 0.25em 1em;
+                        display: block;
+                        cursor: pointer;
+                        transition: all 0.3s ease;
+                        border: 1px solid transparent;
+                        background: $lightBkg;
+                        border-radius: 5px;
+
+                        &.Selected{
+                            border-color: $brandColor;
+                            color: $brandColor;
+                        }
                     }
                 }
             }
-        }
-
-        .Open + .Submenu{
-            max-height: 50vh;
         }
     }
 }

@@ -58,8 +58,8 @@ const Skitlist = (props) => {
                 <Input 
                     elmType="text"
                     value={search}
-                    changed={filterhandler} 
-                    placeholder="חפש לפי שם..."  />
+                    changed={filterhandler}
+                    config={{label: 'חפש מערכון לפי שם'}}  />
 
                 <div className={listClasses.join(' ')}>
                     { filtered.length > 0 ?
