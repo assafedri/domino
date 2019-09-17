@@ -23,6 +23,7 @@ const Input = (props) => {
 
     let inputClasses = [];
     let ErrorMsg = ''
+    let inp;
 
     if(!props.valid && props.shouldValidate && props.touched){
         inputClasses.push(classes.Invalid)
@@ -39,8 +40,11 @@ const Input = (props) => {
                         onChange={props.changed}
                         type={props.elmType}
                         value={props.value}
+                        ref={(ip) => inp = ip}
                         {...props.config}/>
-                    {props.config ? <label>{props.config.label}</label> : null}       
+                    {props.config 
+                        ? <label onClick={ () => inp.focus()  } >{props.config.label}</label> 
+                        : null}       
                 </>
             ) 
             break;
