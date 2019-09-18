@@ -1,0 +1,9 @@
+@import '../../../assets/scss/global.scss';
+
+.SkitIndex{
+    @include container();
+
+    svg{
+        margin-left: 1em;
+    }
+}

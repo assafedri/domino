@@ -34,15 +34,15 @@
         }
     }
 
-    &:nth-child(16n + 1){
-        grid-column: span 2;
-        grid-row: span 2;
+    // &:nth-child(16n + 1){
+    //     grid-column: span 2;
+    //     grid-row: span 2;
 
-        h4{
-            @media($breakpoint1){
-                font-size: 2.5em
-            }    
-        }
-    }
+    //     h4{
+    //         @media($breakpoint1){
+    //             font-size: 2.5em
+    //         }    
+    //     }
+    // }
 
 }

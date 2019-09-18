@@ -1,67 +1,146 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import classes from './CastShow.module.scss';
 import { connect } from 'react-redux';
 import Skits from '../../../components/Skits/Skits';
-import classes from './CastShow.module.scss';
+import { startWikipediaInfo } from '../../../store/actions/cast'
 
-class CastShow extends React.Component{
-    state = {
-        member: {},
-        loading: true
+const CastShow = props => {
+    let member = null;
+    let pageHTML = '';
+
+    if(props.cast){
+        member = props.cast.reduce( (res, group) => {
+            let memData = (group.data.find( member => member._id === props.match.params.id ));
+            return memData ? {...memData, group_label: group.label} : res;
+        },{});
+
+        props.fetchWiki(member.name)
     }
 
-    componentDidMount(){
-        this.getCastMemberData(this.props.match.params.id);
-    }
-
-    getCastMemberData = (id) => {
-        fetch(`/api/cast/${id}`)
-            .then( data => data.json() )
-            .then( results => this.setState({member: results, loading: false}) )
-    }
-
-    render(){
-        let pageContent = 'טוען...';
-        
-        if(!this.state.loading){
-            pageContent = (
-                <>
-                    <section className={classes.image}>
-                        <img src={this.state.member.image} alt={this.state.member.name} />
-                    </section>
-
-                    <section className={classes.title}>
-                        <h1>{this.state.member.name}</h1>
-                        <p>{this.state.member.team}</p>
-                    </section>
-
-                    <section className={classes.admin}>
-                        <Link to="">ערוך</Link> 
-                        <form>
-                            <button type="submit">מחק</button>
-                        </form>
-                    </section>
-
-                    <section className={classes.description}>
-                        <p>{this.state.member.description}</p>
-                    </section>
-
-                    <Skits skits={this.state.member.skits} title={`מערכונים בהשתתפות ${this.state.member.name}:`} />
-                </>
-            )
-        }
-        
-        return(
+    if(member){
+        pageHTML = (
             <div className={classes.CastShow}>
-                {pageContent}
+                <div className={classes.Image} style={{backgroundImage: `url(${member.image})`}} />
+                <div className={classes.Tilte}>
+                    <h1>{member.name}</h1>
+                    <h3>{member.group_label}</h3>
+                </div>
+                <div className={classes.Wiki}>{props.wiki}</div>
+                <Skits
+                    id={member._id}
+                    skits={member.skits} 
+                    title={`מערכונים עם ${member.name}:`} />
             </div>
         )
     }
-}
+    
+
+    return pageHTML;
+};
 
 const mapStateToProps = state => {
     return {
-        team_labels: state.team_labels
+        cast: state.cast,
+        wiki: state.wiki
     }
 }
-export default connect(mapStateToProps)(CastShow);
+
+const mapDisparchToProps = dispatch => {
+    return {
+        fetchWiki: (name) => dispatch(startWikipediaInfo(name))
+    }
+}
+
+
+export default connect(mapStateToProps, mapDisparchToProps)(CastShow);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// import React from 'react';
+// import { Link } from 'react-router-dom';
+// import { connect } from 'react-redux';
+// import Skits from '../../../components/Skits/Skits';
+
+
+// class CastShow extends React.Component{
+//     state = {
+//         member: {},
+//         loading: true
+//     }
+
+//     componentDidMount(){
+//         this.getCastMemberData(this.props.match.params.id);
+//     }
+
+//     getCastMemberData = (id) => {
+//         fetch(`/api/cast/${id}`)
+//             .then( data => data.json() )
+//             .then( results => this.setState({member: results, loading: false}) )
+//     }
+
+//     render(){
+//         let pageContent = 'טוען...';
+        
+//         if(!this.state.loading){
+//             pageContent = (
+//                 <>
+//                     <section className={classes.image}>
+//                         <img src={this.state.member.image} alt={this.state.member.name} />
+//                     </section>
+
+//                     <section className={classes.title}>
+//                         <h1>{this.state.member.name}</h1>
+//                         <p>{this.state.member.team}</p>
+//                     </section>
+
+//                     <section className={classes.admin}>
+//                         <Link to="">ערוך</Link> 
+//                         <form>
+//                             <button type="submit">מחק</button>
+//                         </form>
+//                     </section>
+
+//                     <section className={classes.description}>
+//                         <p>{this.state.member.description}</p>
+//                     </section>
+
+//                     <Skits skits={this.state.member.skits} title={`מערכונים בהשתתפות ${this.state.member.name}:`} />
+//                 </>
+//             )
+//         }
+        
+//         return(
+//             <div className={classes.CastShow}>
+//                 {pageContent}
+//             </div>
+//         )
+//     }
+// }
+
+// const mapStateToProps = state => {
+//     return {
+//         team_labels: state.team_labels
+//     }
+// }
+// export default connect(mapStateToProps)(CastShow);

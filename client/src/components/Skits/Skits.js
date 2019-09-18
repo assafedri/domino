@@ -6,11 +6,9 @@ import Expand from './Skit/Expand/Expand';
 
 import Modal from '../UI/Modal/Modal';
 import Input from '../UI/Input/Input';
-import Button from '../UI/Button/Button';
 
 import classes from './Skits.module.scss';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+
 
 const Skitlist = (props) => {
     const [filtered, setFiltered] = useState(props.skits);
@@ -37,11 +35,6 @@ const Skitlist = (props) => {
         setListClasses(etv ? [classes.Skitlist, classes.Filtered] : [classes.Skitlist])
     }
 
-    const addSkitHandler = () => {
-        setExpand({show: true, item: null})
-        props.history.push('/skits/add');
-    }
-
     return(
         <>
             <Modal show={expand.show} modalClosed={skitViewCloseHandler}>
@@ -49,11 +42,6 @@ const Skitlist = (props) => {
             </Modal>
             <section className={classes.Skits}>
                 {props.title ? <h2>{props.title} ({filtered.length})</h2> : null}
-
-                <Button design="Warning" clicked={addSkitHandler}>
-                    <FontAwesomeIcon icon={faPlus} />
-                    הוסף מערכון
-                </Button>
 
                 <Input 
                     elmType="text"

@@ -27,6 +27,7 @@ mongoose.connect(process.env.DATABASEDB || 'mongodb://localhost/domino', {
 // Express app -----------------------------------------------------------------------
 const app = express();
 app.use(cors())
+app.options('*', cors())
 // app.use(bodyParser.urlencoded({extended: true}))
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, 'client/build')));
