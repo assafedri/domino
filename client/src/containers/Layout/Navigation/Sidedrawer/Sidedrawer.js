@@ -16,7 +16,7 @@ const SideDrawer = (props) => {
                 <div className={classes.Logo}>
                     <Logo width="70px" />
                 </div>
-                <Navigation />
+                <Navigation clicked={props.closed}/>
             </div>
         </>
     )
