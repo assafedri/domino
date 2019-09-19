@@ -44,9 +44,9 @@ class Cover extends React.Component{
                         })}
                     </div>
                     <div className={classes.Info}>
-                    <Logo width="auto" />
-                    <p>כל המערכונים, כל השחקנים, כל העונות - במקום אחד!</p>
-                </div>
+                        <Logo width="auto" />
+                        <p>כל המערכונים, כל השחקנים, כל העונות - במקום אחד!</p>
+                    </div>
             </section>
         )
     }

@@ -85,3 +85,9 @@ export const startWikipediaInfo = name => {
            })
     }
 }
+
+export const clearWikipediaInfo = () => {
+    return {
+        type: actionTypes.CLEAR_WIKIPEDIA_INFO
+    }
+}

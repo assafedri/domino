@@ -4,10 +4,7 @@ import axios from '../../../axios-domino';
 import Cover from '../../../components/UI/Cover/Cover'; 
 import Skits from '../../../components/Skits/Skits';
 import Spinner from '../../../components/UI/Spinner/Spinner';
-import Button from '../../../components/UI/Button/Button';
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import classes from './SkitIndex.module.scss';
 
 class SkitIndex extends React.Component{
@@ -38,6 +35,7 @@ class SkitIndex extends React.Component{
 
     render(){
         let skitsHTML = <Skits skits={this.state.allSkits} title="כל המערכונים" />;
+      
 
         if(this.state.loading){
             skitsHTML = <Spinner message="טוען מערכונים"/>
@@ -45,15 +43,11 @@ class SkitIndex extends React.Component{
             skitsHTML = <p>{this.state.error}</p>
         }
 
-
         return(
             <>
                 <Cover />
+
                 <div className={classes.SkitIndex}>
-                    <Button design="Warning" clicked={this.addSkitHandler}>
-                        <FontAwesomeIcon icon={faPlus} />
-                        הוסף מערכון
-                    </Button>
                     {skitsHTML}
                 </div>
   

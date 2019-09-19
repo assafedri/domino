@@ -1,12 +1,17 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import classes from './CastShow.module.scss';
 import { connect } from 'react-redux';
 import Skits from '../../../components/Skits/Skits';
-import { startWikipediaInfo } from '../../../store/actions/cast'
+import { startWikipediaInfo, clearWikipediaInfo } from '../../../store/actions/cast'
 
 const CastShow = props => {
     let member = null;
     let pageHTML = '';
+    const {clearWiki} = props;
+
+    useEffect( () => {
+        return () => clearWiki();
+    }, [clearWiki] )
 
     if(props.cast){
         member = props.cast.reduce( (res, group) => {
@@ -21,7 +26,7 @@ const CastShow = props => {
         pageHTML = (
             <div className={classes.CastShow}>
                 <div className={classes.Image} style={{backgroundImage: `url(${member.image})`}} />
-                <div className={classes.Tilte}>
+                <div className={classes.Title}>
                     <h1>{member.name}</h1>
                     <h3>{member.group_label}</h3>
                 </div>
@@ -47,7 +52,8 @@ const mapStateToProps = state => {
 
 const mapDisparchToProps = dispatch => {
     return {
-        fetchWiki: (name) => dispatch(startWikipediaInfo(name))
+        fetchWiki: (name) => dispatch(startWikipediaInfo(name)),
+        clearWiki: () => dispatch(clearWikipediaInfo())
     }
 }
 

@@ -30,6 +30,11 @@ const castResucer = (state = initialState, action) => {
                 ...state,
                 error: action.error
             }    
+        case actionTypes.CLEAR_WIKIPEDIA_INFO:
+            return{
+                ...state,
+                wiki: null,
+            }
         default:
             return state;
     }

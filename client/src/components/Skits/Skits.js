@@ -3,9 +3,9 @@ import { withRouter } from 'react-router-dom';
 
 import Skit from './Skit/Skit';
 import Expand from './Skit/Expand/Expand';
-
 import Modal from '../UI/Modal/Modal';
 import Input from '../UI/Input/Input';
+import YouTubeSubscribe from './YoutubeSubscribe/YoutubeSubscribe'
 
 import classes from './Skits.module.scss';
 
@@ -16,6 +16,7 @@ const Skitlist = (props) => {
     const [memberId, setMemberId] = useState(props._id)
     const [search, setSearch] = useState('');
     const [listClasses, setListClasses] = useState([classes.Skitlist]);
+
 
     useEffect( () => {
         if(props.id !== memberId){
@@ -41,13 +42,27 @@ const Skitlist = (props) => {
                 <Expand skit={expand.item} />
             </Modal>
             <section className={classes.Skits}>
-                {props.title ? <h2>{props.title} ({filtered.length})</h2> : null}
+                {/* {props.title ? <h2>{props.title} ({filtered.length})</h2> : null} */}
+                <h2>
+                    {search ? `תוצאות חיפוש עבור ״${search}״` : props.title}
+                    <small> ({filtered.length})</small></h2>
 
-                <Input 
-                    elmType="text"
-                    value={search}
-                    changed={filterhandler}
-                    config={{label: 'חפש מערכון לפי שם'}}  />
+                <div className={classes.YouTubeSubscribe}>
+                    <YouTubeSubscribe
+                        channelid={"UCd4xW6qYm4BvwCqXsQ2kzPQ"}
+                        theme={"dark"}
+                        layout={"full"}
+                        count={"default"}
+                        />  
+                </div>
+                
+                <div className={classes.Search}>
+                    <Input 
+                        elmType="text"
+                        value={search}
+                        changed={filterhandler}
+                        config={{label: 'חפש מערכון לפי שם'}}  />
+                </div>       
 
                 <div className={listClasses.join(' ')}>
                     { filtered.length > 0 ?

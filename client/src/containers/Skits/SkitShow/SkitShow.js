@@ -80,7 +80,7 @@ class SkitShow extends React.Component{
                         <h2>משתתפים</h2>
                         <Cast cast={this.state.skit.actors} clicked={this.castClickHandler} />
                     </section>
-                    <section className={classes.charecters}>
+                    {/* <section className={classes.charecters}>
                         <h2>דמויות</h2>
                         <ul>
                             {[1,2,3,4].map((item, index) => {
@@ -94,7 +94,7 @@ class SkitShow extends React.Component{
                                 )    
                             })}
                         </ul>
-                    </section>
+                    </section> */}
                     <section className={classes.comments}>
                         <Comments comments={this.state.skit.comments} />
                     </section>
