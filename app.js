@@ -15,7 +15,7 @@ castRoutes          = require('./routes/cast');
 
 
 // DB Connection ---------------------------------------------------------------------
-mongoose.connect(process.env.DATABASEDB || 'mongodb://localhost/domino', {
+mongoose.connect(process.env.DATABASEDB || 'mongodb+srv://assaf244:ae240486@yelpcluster-6w5qu.mongodb.net/test?retryWrites=true&w=majority', {
     useNewUrlParser: true ,
     useFindAndModify: false ,
     useCreateIndex: true

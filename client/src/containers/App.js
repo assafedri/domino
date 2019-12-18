@@ -1,8 +1,8 @@
-import React from 'react';
+import React, { useEffect, useCallback } from 'react';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
 
-import { connect } from 'react-redux';
-import {initCast} from '../store/actions/cast'
+import { useDispatch } from 'react-redux';
+import { initCast } from '../store/actions/cast'
 
 import Layout from '../containers/Layout/Layout';
 import SkitsIndex from './Skits/SkitIndex/SkitIndex';
@@ -15,39 +15,32 @@ import CastIndex from './Cast/CastIndex/CastIndex';
 
 import './App.scss'
 
-class App extends React.Component {
-	componentDidMount () {
-        this.props.onInitCast();
-	}
+const App = () => {
+	const dispatch = useDispatch();
+	const onInitCast = useCallback(() => dispatch(initCast()), [dispatch]); 
 
+	useEffect( () => {
+		onInitCast();
+	}, [onInitCast]);
 
-	render(){
-		return (
-			<BrowserRouter>
-				<div className="App">
-					  <Layout>
-						<Switch>
-							<Route path="/" exact component={SkitsIndex} />
-							<Route path="/skits/add" exact component={SkitNew} />
-							<Route path="/skits/:id/edit" exact component={SkitEdit} />
-							<Route path="/skits/:id" exact component={SkitShow} />
-							<Route path="/skits" component={SkitsIndex} />
-							<Route path="/cast/:id" exact component={CastShow} />
-							<Route path="/cast/" exact component={CastIndex} />
-							<Route component={PageNotFound}/>
-						</Switch>
-					  </Layout>
-				</div>
-			</BrowserRouter>
-		  );
-		}
-	}
-
-
-const mapDispatchToProps = dispatch => {
-    return{
-        onInitCast: () => dispatch(initCast())
-    }
+	return (
+		<BrowserRouter>
+			<div className="App">
+				<Layout>
+					<Switch>
+						<Route path="/" exact component={SkitsIndex} />
+						<Route path="/skits/add" exact component={SkitNew} />
+						<Route path="/skits/:id/edit" exact component={SkitEdit} />
+						<Route path="/skits/:id" exact component={SkitShow} />
+						<Route path="/skits" component={SkitsIndex} />
+						<Route path="/cast/:id" exact component={CastShow} />
+						<Route path="/cast/" exact component={CastIndex} />
+						<Route component={PageNotFound}/>
+					</Switch>
+				</Layout>
+			</div>
+		</BrowserRouter>
+	);
 }
 
-export default connect(null,mapDispatchToProps)(App);
+export default App;

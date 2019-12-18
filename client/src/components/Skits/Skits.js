@@ -9,7 +9,6 @@ import YouTubeSubscribe from './YoutubeSubscribe/YoutubeSubscribe'
 
 import classes from './Skits.module.scss';
 
-
 const Skitlist = (props) => {
     const [filtered, setFiltered] = useState(props.skits);
     const [expand, setExpand] = useState({show: false, item: null});
@@ -17,13 +16,12 @@ const Skitlist = (props) => {
     const [search, setSearch] = useState('');
     const [listClasses, setListClasses] = useState([classes.Skitlist]);
 
-
     useEffect( () => {
+        setFiltered(props.skits)
         if(props.id !== memberId){
-            setFiltered(props.skits)
             setMemberId(props.id);
             setSearch('')
-        }
+        }else{}
     },[props.id, props.skits, memberId])
 
     const skitClickHandler = (e, skit) => setExpand({show: true, item: skit});

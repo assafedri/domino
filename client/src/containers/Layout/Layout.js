@@ -1,38 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './Header/Header';
 import Footer from './Footer/Footer'
 import SideDrawer from './Navigation/Sidedrawer/Sidedrawer';
 
-class Layout extends React.Component{
-    state = {
-        showSideDrawer: false
+const Layout = props => {
+    const [showSideDrawer, setShowSideDrawer] = useState(false);
+
+    const sideDrawerClosedHandler = () => {
+        setShowSideDrawer(false);
     }
 
-    sideDrawerClosedHandler = () => {
-        this.setState({showSideDrawer: false})
+    const sideDrawerToggleHandler = () => {
+        setShowSideDrawer(!showSideDrawer);
     }
 
-    sideDrawerToggleHandler = () => {
-        console.log('here')
-        this.setState( (prevState) => { 
-            return {showSideDrawer: !prevState.showSideDrawer} 
-        })
-    }
-
-    render(){
-        return(
-            <>
-            <Header toggle={this.sideDrawerToggleHandler}/>
+    return(
+        <>
+            <Header toggle={sideDrawerToggleHandler}/>
             <SideDrawer 
-                open={this.state.showSideDrawer}
-                closed={this.sideDrawerClosedHandler} />
+                open={showSideDrawer}
+                closed={sideDrawerClosedHandler} />
             <main>
-                {this.props.children}
+                {props.children}
             </main>
             <Footer />
         </>
-        )
-    }
+    )
 }    
 
 export default Layout;

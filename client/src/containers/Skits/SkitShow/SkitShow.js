@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useReducer} from 'react';
 import axios from '../../../axios-domino';
 import {withRouter, Link} from 'react-router-dom';
 
@@ -8,105 +8,112 @@ import Comments from '../../../components/Skits/Skit/Comments/Comments';
 import Cast from '../../../components/Cast/Cast';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Button from '../../../components/UI/Button/Button';
-
-import classes from './SkitShow.module.scss'; 
 import PageNotFound from '../../PageNotFound/PageNotFound';
 
-class SkitShow extends React.Component{
-    state = {
-        skit: {},
-        loading: true,
-        error: false
-    }
+import classes from './SkitShow.module.scss'; 
 
-    componentDidMount(){
-        this.getSkitData(this.props.match.params.id);
+const httpReducer = ( currentState, action ) => {
+    switch(action.type){
+        case 'load':
+            return {...currentState, error: false, loading: true}
+        case 'response':
+            return {error: false, loading: false, data: action.data}
+        case 'error':
+            return {error: action.error, loading: false, data: null}
+        default:   
+            throw new Error('Reducer Error');     
     }
+}
 
-    getSkitData = (id) => {
-        axios.get(`/api/skits/${id}`)
-        .then( response => {
-            if(response.status === 200){
-                this.setState({skit: response.data, loading: false})
-            }
-        }).catch(error => {
-            this.setState({error: error.message})
-        })
-    }
+const SkitShow = props =>{
+    const [state, dispatch] = useReducer(httpReducer, {error: false, loading: true, data: false});
+    const skitId = props.match.params.id;
 
-    castClickHandler = (e) => {
+    useEffect( () => {
+        dispatch({type: 'load'});
+        axios.get(`/api/skits/${skitId}`)
+        .then( response => dispatch({ type: 'response', data: response.data }))
+        .catch( error => dispatch( { type: 'error', error: error.message}))
+    }, [skitId]);
+
+    const castClickHandler = (e) => {
+        alert('הנך מועבר לעמוד השחקן')
         const targetId = e.target.parentNode.id
-        this.props.history.push('/cast/' + targetId);
+        props.history.push('/cast/' + targetId);
     }
 
-    deleteSkitHandler = (e) => {
-        e.preventDefault();
-        const skitId = this.state.skit._id;
+    const deleteSkitHandler = (e) => {
+        alert('Delete clicked')
+        // e.preventDefault();
+        // const skitId = state.data._id;
         
-        if(window.confirm('האם אתה בטוח?')){
-            axios.delete(`/api/skits/${skitId}`)
-            .then(response => console.log(response))
-            .catch(error => console.log(error))
-        }
+        // if(window.confirm('האם אתה בטוח?')){
+        //     axios.delete(`/api/skits/${skitId}`)
+        //     .then(response => console.log(response))
+        //     .catch(error => console.log(error))
+        // }
     }
 
-    render(){
-        let pageContent = <Spinner message="טוען מערכון..."/>;
+    let pageContent;
 
-        if(this.state.error){
-            pageContent = <PageNotFound message="המערכון לא נמצא"/>
-        }
-        
-        if(!this.state.loading){
-            pageContent = (
-                <>
-                    <section className={classes.video} >
-                        <YoutubeVideo id={this.state.skit.youtube_id} />
-                    </section>
-                    <section className={classes.admin}>
-                        <Button design="Warning">
-                            <Link to={`/skits/${this.state.skit.youtube_id}/edit`}>ערוך</Link>
-                        </Button>
-                        <form onSubmit={this.deleteSkitHandler}>
-                            <Button design="Danger">מחק</Button>
-                        </form>
-                    </section>
-                    <h1>{this.state.skit.name}</h1>
-                    <section className={classes.description}>
-                        <p>לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית להאמית קרהשק סכעיט דז מא, מנכם למטכין נשואי מנורך. קולהע צופעט למרקוח איבן איף, ברומץ כלרשט מיחוצים. קלאצי קונסקטורר אדיפיסינג אלית. סת אלמנקום ניסי נון ניבאה. דס איאקוליס וולופטה דיאם. וסטיבולום אט דולור, קראס אגת לקטוס וואל אאוגו וסטיבולום סוליסי טידום בעליק. קונדימנטום קורוס בליקרה, נונסטי קלובר בריקנה סטום, לפריקך תצטריק לרטי.</p>
-                        <Aired season={this.state.skit.aired.season} episode={this.state.skit.aired.episode}/>
-                    </section>
-                    <section className={classes.cast}>
-                        <h2>משתתפים</h2>
-                        <Cast cast={this.state.skit.actors} clicked={this.castClickHandler} />
-                    </section>
-                    {/* <section className={classes.charecters}>
-                        <h2>דמויות</h2>
-                        <ul>
-                            {[1,2,3,4].map((item, index) => {
-                                return(
-                                    <li key={index}>
-                                        <Link to="" >
-                                            <img src="bla" alt=""/>
-                                            <h4>דמות {item}</h4>
-                                        </Link>                                    
-                                    </li>
-                                )    
-                            })}
-                        </ul>
-                    </section> */}
-                    <section className={classes.comments}>
-                        <Comments comments={this.state.skit.comments} />
-                    </section>
-                </>    
-            )
-        }
-        return(
+    if(state.loading){
+        pageContent = <Spinner message="טוען מערכון..."/>;
+    }else if(state.error){
+        pageContent = <PageNotFound message="המערכון לא נמצא"/>
+    }else{
+        pageContent = (
             <div className={classes.SkitShow}>
-                {pageContent}
+
+                <section className={classes.video} >
+                    <YoutubeVideo id={state.data.youtube_id} />
+                </section>
+
+                <section className={classes.admin}>
+                    <Button design="Warning">
+                        <Link to={`/skits/${state.data.youtube_id}/edit`}>ערוך</Link>
+                    </Button>
+                    <form onSubmit={deleteSkitHandler}>
+                        <Button design="Danger">מחק</Button>
+                    </form>
+                </section>
+
+                <h1>{state.data.name}</h1>
+
+                <section className={classes.description}>
+                    <p>לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית להאמית קרהשק סכעיט דז מא, מנכם למטכין נשואי מנורך. קולהע צופעט למרקוח איבן איף, ברומץ כלרשט מיחוצים. קלאצי קונסקטורר אדיפיסינג אלית. סת אלמנקום ניסי נון ניבאה. דס איאקוליס וולופטה דיאם. וסטיבולום אט דולור, קראס אגת לקטוס וואל אאוגו וסטיבולום סוליסי טידום בעליק. קונדימנטום קורוס בליקרה, נונסטי קלובר בריקנה סטום, לפריקך תצטריק לרטי.</p>
+                    <Aired season={state.data.aired.season} episode={state.data.aired.episode}/>
+                </section>
+
+                <section className={classes.cast}>
+                    <h2>משתתפים</h2>
+                    <Cast cast={state.data.actors} clicked={castClickHandler} />
+                </section>
+
+                {/* <section className={classes.charecters}>
+                    <h2>דמויות</h2>
+                    <ul>
+                        {[1,2,3,4].map((item, index) => {
+                            return(
+                                <li key={index}>
+                                    <Link to="" >
+                                        <img src="bla" alt=""/>
+                                        <h4>דמות {item}</h4>
+                                    </Link>                                    
+                                </li>
+                            )    
+                        })}
+                    </ul>
+                </section> */}
+
+                <section className={classes.comments}>
+                    <Comments comments={state.data.comments} />
+                </section>
             </div>
         )
     }
+
+    return pageContent;
+
 }
 
 export default withRouter(SkitShow);

@@ -1,7 +1,6 @@
 import React, {useEffect} from 'react';
 
-const Backdrop = (props) => {
-
+const Backdrop = ({ show, clicked }) => {
     const backdropStyle = {
         position: 'fixed',
         top: 0,
@@ -14,18 +13,17 @@ const Backdrop = (props) => {
     }
     
     useEffect( () => {
-        if(props.show){
+        if(show){
             document.body.style.overflow = "hidden";
         }
-        
         
         return () => {
             document.body.style.overflow = "auto"
         }
-    })
+    }, [show])
 
     return(
-        props.show ? <div onClick={props.clicked} style={backdropStyle}></div> : null
+        show && <div onClick={clicked} style={backdropStyle}></div>
     )
 }
 export default Backdrop;
