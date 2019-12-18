@@ -44,14 +44,14 @@ const SkitShow = props =>{
 
     const deleteSkitHandler = (e) => {
         alert('Delete clicked')
-        // e.preventDefault();
-        // const skitId = state.data._id;
+        e.preventDefault();
+        const skitId = state.data._id;
         
-        // if(window.confirm('האם אתה בטוח?')){
-        //     axios.delete(`/api/skits/${skitId}`)
-        //     .then(response => console.log(response))
-        //     .catch(error => console.log(error))
-        // }
+        if(window.confirm('האם אתה בטוח?')){
+            axios.delete(`/api/skits/${skitId}`)
+            .then(response => console.log(response))
+            .catch(error => console.log(error))
+        }
     }
 
     let pageContent;
