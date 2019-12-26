@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import useHttp from '../../../hooks/http';
 
-import initalFiledsValues from './SkitNewFormFields';
+import initalFiledsValues from './SkitFormFields';
 
 import Input    from '../../../components/UI/Input/Input'; 
 import Button   from '../../../components/UI/Button/Button';
@@ -166,7 +166,7 @@ const SkitNew = () => {
     }
 
     return(
-        <div className={classes.SkitNew}>
+        <div className={classes.SkitForm}>
             <h1>הוספת מערכון חדש</h1>
             {pageContent}
         </div>

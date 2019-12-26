@@ -2,15 +2,15 @@ import React, {useState} from 'react';
 import classes from './Input.module.scss';
 
 const Input = (props) => {
+
     let elm = null;
-    const [numSelected, setNumselected] = useState(0)
+    const [numSelected, setNumselected] = useState(props.elmType === 'multiselect' ? props.value.length : 0)
 
     const selectClickHandler = (e) => {
         e.target.classList.toggle(classes.Open)
     }
     
     const optionMarkHandler = (e) => {
-        console.log(e.target)
         const etcl = e.target.classList;
         if(etcl.contains(classes.Selected)){
             etcl.remove(classes.Selected)
@@ -76,10 +76,15 @@ const Input = (props) => {
                                 <div key={group.id} className={classes.Group}>
                                     <div className={classes.Title}>{group.label}</div>
                                     {group.data.map(member => {
+                                        let selected = '';
+                                        if(props.value.includes(member._id)){
+                                            selected = classes.Selected;
+                                        }
+
                                         return(
                                             <div className={classes.Member} key={member._id}>
-                                                <input type="checkbox" id={member._id} name={props.name} value={member._id} onChange={props.changed}/>
-                                                <label htmlFor={member._id} onClick={optionMarkHandler}>
+                                                <input type="checkbox" id={member._id} name={props.name} value={member._id} onChange={props.changed} />
+                                                <label htmlFor={member._id} onClick={optionMarkHandler} className={selected}>
                                                     {member.name}
                                                 </label>
                                             </div>
