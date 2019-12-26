@@ -6,12 +6,13 @@ const methodOverride = require('method-override');
 const cors           = require('cors');
 
 const Skit      = require('./models/skit');
-
 const Comment   = require('./models/comment');
 // const User      = require('./models/user');
 
 skitsRoutes         = require('./routes/skits');
 castRoutes          = require('./routes/cast');
+
+const seed          = require('./seeds');
 
 
 // DB Connection ---------------------------------------------------------------------
@@ -23,6 +24,7 @@ mongoose.connect(process.env.DATABASEDB || 'mongodb+srv://assaf244:ae240486@yelp
 .then( () => console.log('Connected to DB!'))
 .catch( error => console.log(`Error: ${error.message}`))
 
+// seed();
 
 // Express app -----------------------------------------------------------------------
 const app = express();

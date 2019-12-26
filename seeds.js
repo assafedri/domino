@@ -54,7 +54,7 @@ const actors = [
     },
     {
         name: "עדי אשכנזי", 
-        image: 'https://tarbut.haifahaifa.co.il/wp-content/uploads/2019/09/24076_195365.jpg' ,
+        image: 'https://images1.ynet.co.il/xnet//PicServer2/pic/20122006/73740/LAI033659_360.jpg' ,
         team: "next-gen"
     },
     {
@@ -91,11 +91,13 @@ const actors = [
 
 async function seedDb(){
     try {
+        console.log('Deleting Data...');
         await Comment.deleteMany({});
         await Skit.deleteMany();
         await Actor.deleteMany();
         let user = await User.findOne({username: 'assaf244'})
 
+        console.log('Creating Cast...');
         for (actor of actors){
             let newActor = await Actor.create(actor);
             newActor.author.id = user._id;
@@ -104,10 +106,10 @@ async function seedDb(){
             actor.id = newActor._id;
         }
 
-        fs.createReadStream('seed.csv')
-            .pipe(csv())
-            .on('data', async(row) => {
+        console.log('Reading CSV...');
+        fs.createReadStream('seed.csv').pipe(csv()).on('data', async(row) => {
                 if(row.youtube_id !== ''){
+                    console.log('Proccessing ' + row.youtube_id);
                     const obj = {
                         name: row.name,
                         youtube_id: row.youtube_id,

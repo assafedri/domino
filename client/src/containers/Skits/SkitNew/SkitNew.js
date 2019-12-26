@@ -105,12 +105,13 @@ const SkitNew = () => {
             actors: fields.cast.value
         }
 
-        sendRequest('/api/aaaaskits/', 'POST', formData )
+        sendRequest('/api/skits/', 'POST', formData )
     }
 
     const renderForm = () => {
         const formFileds = [];
-
+        
+        // eslint-disable-next-line
         for(let key in fields){
             formFileds.push({ id: key, data: fields[key]})
         }
