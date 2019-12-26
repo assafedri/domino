@@ -1,53 +1,33 @@
-import React, { useEffect, useReducer } from 'react';
-import axios from '../../../axios-domino';
+import React, { useEffect } from 'react';
 
 import Cover from '../../../components/UI/Cover/Cover'; 
 import Skits from '../../../components/Skits/Skits';
 import Spinner from '../../../components/UI/Spinner/Spinner';
 
+import useHttp from '../../../hooks/http';
+
 import classes from './SkitIndex.module.scss';
 
-const httpReducer = ( currentState, action ) => {
-    switch(action.type){
-        case 'Send':
-            return {error: false, loading: true, data: null}
-        case 'response':
-            return {error: false, loading: false, data: action.data}
-        case 'error':
-            return {error: action.error, loading: false, data: null}
-        default:   
-            throw new Error('Reducer Error');     
-    }
-}
-
 const SkitIndex = () => {
-    const [state, dispatch] = useReducer(httpReducer, {error: false, loading: false, data: []})
+    const {loading, data, error, sendRequest} = useHttp();
 
-    useEffect( () => {
-        dispatch({type: 'Send'});
-        axios.get('api/skits/')
-            .then( response => {
-                dispatch({type: 'response', data: response.data})
-            }).catch( error => {
-                dispatch({type: 'error', error: error.message})
-            })
-    }, []);
+    useEffect( () => sendRequest('api/skits/', 'GET'), [sendRequest]);
 
-    let skitsHTML;
+    let pageContent;
     
-    if(state.loading){
-        skitsHTML = <Spinner message="טוען מערכונים"/>
-    }else if(state.error){
-        skitsHTML = <p>{state.error}</p>
-    }else{
-        skitsHTML = <Skits skits={state.data} title="כל המערכונים" />;
+    if(loading){
+        pageContent = <Spinner message="טוען מערכונים..."/>
+    }else if(error){
+        pageContent = <p>{error}</p>
+    }else if(data){
+        pageContent = <Skits skits={data} title="כל המערכונים" />;
     }
 
     return(
         <>
             <Cover />
             <div className={classes.SkitIndex}>
-                {skitsHTML}
+                {pageContent}
             </div>
 
         </>    

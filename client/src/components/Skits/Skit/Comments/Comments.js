@@ -1,5 +1,6 @@
 import React from 'react';
 import classes from './Comments.module.scss';
+import Button from '../../../UI/Button/Button';
 
 export default (props) => {
     let commentsHTML = (
@@ -21,10 +22,14 @@ export default (props) => {
         )
     }
 
+    const addCommentHandler = () => {
+        alert('בקרוב')
+    }
+
     return(
         <div className={classes.Comments}>
             <h2>תגובות</h2>
-            <button>הוסף תגובה</button>
+            <Button clicked={addCommentHandler} design="Warning">הוסף תגובה</Button>
             {commentsHTML}
         </div>
     )

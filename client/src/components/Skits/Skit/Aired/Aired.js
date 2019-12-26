@@ -11,6 +11,6 @@ export default (props) => {
     }
 
     return(
-        <p>{airedinfo}</p>
+        <p className="Aired">{airedinfo}</p>
     )
 }

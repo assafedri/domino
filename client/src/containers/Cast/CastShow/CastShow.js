@@ -1,25 +1,29 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback } from 'react';
 import classes from './CastShow.module.scss';
-import { connect } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import Skits from '../../../components/Skits/Skits';
 import { startWikipediaInfo, clearWikipediaInfo } from '../../../store/actions/cast'
 
 const CastShow = props => {
+    const dispatch = useDispatch();
+    const fetchWiki = (name) => dispatch(startWikipediaInfo(name));
+    const clearWiki = useCallback(() => dispatch(clearWikipediaInfo()), [dispatch]);
+    const cast = useSelector(state => state.cast );
+    const wiki = useSelector(state => state.wiki )
+
     let member = null;
     let pageHTML = '';
-    const {clearWiki} = props;
 
     useEffect( () => {
         return () => clearWiki();
     }, [clearWiki] )
 
-    if(props.cast){
-        member = props.cast.reduce( (res, group) => {
+    if(cast){
+        member = cast.reduce( (res, group) => {
             let memData = (group.data.find( member => member._id === props.match.params.id ));
             return memData ? {...memData, group_label: group.label} : res;
         },{});
-
-        props.fetchWiki(member.name)
+        fetchWiki(member.name)
     }
 
     if(member){
@@ -30,7 +34,7 @@ const CastShow = props => {
                     <h1>{member.name}</h1>
                     <h3>{member.group_label}</h3>
                 </div>
-                <div className={classes.Wiki}>{props.wiki}</div>
+                <div className={classes.Wiki}>{wiki}</div>
                 <Skits
                     id={member._id}
                     skits={member.skits} 
@@ -43,22 +47,22 @@ const CastShow = props => {
     return pageHTML;
 };
 
-const mapStateToProps = state => {
-    return {
-        cast: state.cast,
-        wiki: state.wiki
-    }
-}
+// const mapStateToProps = state => {
+//     return {
+//         cast: state.cast,
+//         wiki: state.wiki
+//     }
+// }
 
-const mapDisparchToProps = dispatch => {
-    return {
-        fetchWiki: (name) => dispatch(startWikipediaInfo(name)),
-        clearWiki: () => dispatch(clearWikipediaInfo())
-    }
-}
+// const mapDisparchToProps = dispatch => {
+//     return {
+//         fetchWiki: (name) => dispatch(startWikipediaInfo(name)),
+//         clearWiki: () => dispatch(clearWikipediaInfo())
+//     }
+// }
 
 
-export default connect(mapStateToProps, mapDisparchToProps)(CastShow);
+export default CastShow;
 
 
 

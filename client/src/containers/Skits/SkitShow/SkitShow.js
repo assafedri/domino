@@ -1,6 +1,6 @@
 import React, {useEffect, useReducer} from 'react';
 import axios from '../../../axios-domino';
-import {withRouter, Link} from 'react-router-dom';
+import {withRouter} from 'react-router-dom';
 
 import YoutubeVideo from '../../../components/Skits/Skit/YoutubeVideo/YoutubeVideo';
 import Aired from '../../../components/Skits/Skit/Aired/Aired';
@@ -25,7 +25,7 @@ const httpReducer = ( currentState, action ) => {
     }
 }
 
-const SkitShow = props =>{
+const SkitShow = props => {
     const [state, dispatch] = useReducer(httpReducer, {error: false, loading: true, data: false});
     const skitId = props.match.params.id;
 
@@ -64,22 +64,22 @@ const SkitShow = props =>{
         pageContent = (
             <div className={classes.SkitShow}>
 
-                <section className={classes.video} >
-                    <YoutubeVideo id={state.data.youtube_id} />
-                </section>
-
                 <section className={classes.admin}>
-                    <Button design="Warning">
-                        <Link to={`/skits/${state.data.youtube_id}/edit`}>ערוך</Link>
+                    <Button design="Warning" clicked={() => props.history.push(`/skits/${state.data.youtube_id}/edit`)}>
+                        ערוך
                     </Button>
                     <form onSubmit={deleteSkitHandler}>
                         <Button design="Danger">מחק</Button>
                     </form>
                 </section>
 
-                <h1>{state.data.name}</h1>
+
+                <section className={classes.video} >
+                    <YoutubeVideo id={state.data.youtube_id} />
+                </section>
 
                 <section className={classes.description}>
+                    <h1>{state.data.name}</h1>
                     <p>לורם איפסום דולור סיט אמט, קונסקטורר אדיפיסינג אלית להאמית קרהשק סכעיט דז מא, מנכם למטכין נשואי מנורך. קולהע צופעט למרקוח איבן איף, ברומץ כלרשט מיחוצים. קלאצי קונסקטורר אדיפיסינג אלית. סת אלמנקום ניסי נון ניבאה. דס איאקוליס וולופטה דיאם. וסטיבולום אט דולור, קראס אגת לקטוס וואל אאוגו וסטיבולום סוליסי טידום בעליק. קונדימנטום קורוס בליקרה, נונסטי קלובר בריקנה סטום, לפריקך תצטריק לרטי.</p>
                     <Aired season={state.data.aired.season} episode={state.data.aired.episode}/>
                 </section>

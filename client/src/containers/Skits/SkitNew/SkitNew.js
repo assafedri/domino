@@ -1,66 +1,36 @@
-import React, {useState, useEffect, useReducer } from 'react';
+import React, {useState, useEffect, useReducer, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import axios from '../../../axios-domino';
+import useHttp from '../../../hooks/http';
+
+import initalFiledsValues from './SkitNewFormFields';
 
 import Input    from '../../../components/UI/Input/Input'; 
 import Button   from '../../../components/UI/Button/Button';
 import Spinner  from '../../../components/UI/Spinner/Spinner';
 import classes  from './SkitNew.module.scss';
 
-const initalFileds = {
-    name: {
-        elmType: 'text', value: '',
-        config: { label: 'שם המערכון' },
-        validation: { required: true }, valid: false, touched: false,
-    },
-    youtube_id: {
-        elmType: 'text', value: '',
-        config: { label: 'מזהה Youtube' },
-        validation: { required: true }, valid: false, touched: false,
-    },
-    season: {
-        elmType: 'number', value: '',
-        config: { label: 'עונה', min: 1, step: 1, max: 4 },
-        validation: { required: true }, valid: false, touched: false
-    },
-    episode: {
-        elmType: 'number', value: '',
-        config: { label: 'פרק', min: 1, step: 1, max: 18 },
-        validation: { required: true }, valid: false, touched: false
-    },
-    cast: {
-        elmType: 'multiselect', value: [],
-        config: { label: 'משתתפים', title: 'בחר שחקנים', options: [] },  
-        validation: { atLeast: 1 }, valid: false, touched: false
-    }
-}
-
-const formReducer = ( currentState, action ) => {
+const formReducer = ( curFormState, action ) => {
     switch(action.type){
         case 'loading':
-            return { ...currentState, step: 'loading' }
+            return { ...curFormState, loading: true, loadingText: 'טוען טופס...', valid: false, render: false }
         case 'initial':
-            return { ...currentState, step: 'initial', error: false }
-        case 'submit':
-            return { ...currentState, step: 'submit' }
-        case 'success':
-            return { ...currentState, step: 'success', link: action.link }
-        case 'failed':
-            return { ...currentState, step: 'failed', error: action.error }
+            return { ...curFormState, loading: false, loadingText: null, render: true, valid: false }
+        case 'valid':
+            return { ...curFormState, valid: true }
         default:   
             throw new Error('Reducer Error');     
     }
 }
 
-const SkitNew = props => {
+const SkitNew = () => {
     const castData = useSelector(state => state.cast);
-    const [fields, setFields] = useState(initalFileds)
-    const [submitable, setSubmitable] = useState(false)
-    const [formState, dispatch] = useReducer(formReducer, {})
+    const [fields, setFields] = useState(initalFiledsValues);
+    const [formState, dispatch] = useReducer(formReducer, {});
+    const {loading, error, data, sendRequest, clearRequest} = useHttp();
 
-    useEffect( () => {
-        dispatch({type: 'loading'})
+    const resetFormHandler = useCallback(() => {
+        clearRequest();
         if(castData){
             setFields( f => {
                 return {
@@ -73,11 +43,12 @@ const SkitNew = props => {
             })
             dispatch({type: 'initial'})
         }
-    }, [castData]);
+    }, [castData, clearRequest]);
 
-    const resetFormHandler = () => {
-        dispatch({type: 'initial'})
-    }
+    useEffect( () => {
+        dispatch({type: 'loading'})
+        resetFormHandler();
+    }, [resetFormHandler]);
 
     const checkValidity = (value, rules) => {
         let isValid = true;
@@ -112,7 +83,6 @@ const SkitNew = props => {
             fieldsUpdate[id].value = e.target.value;
         }
 
-        /* Validation */
         let formIsValid = true;
         fieldsUpdate[id].valid = checkValidity(fieldsUpdate[id].value, fieldsUpdate[id].validation)
         // eslint-disable-next-line
@@ -120,14 +90,13 @@ const SkitNew = props => {
             formIsValid = fieldsUpdate[id].valid && formIsValid;
         }
 
-        setSubmitable(formIsValid);
+        formIsValid && dispatch({type: 'valid'});
         setFields(fieldsUpdate);
 
     }
 
     const submitFormHandler = e => {
         e.preventDefault();
-        dispatch({type: 'submit'})
 
         const formData = {
             name: fields.name.value,
@@ -136,9 +105,7 @@ const SkitNew = props => {
             actors: fields.cast.value
         }
 
-        axios.post('/api/skits/', formData)
-            .then( response => dispatch({type: 'success', link: `/skits/${response.data.youtube_id}` }) )
-            .catch( error => dispatch({ type: 'failed', error: error.message }))
+        sendRequest('/api/aaaaskits/', 'POST', formData )
     }
 
     const renderForm = () => {
@@ -163,41 +130,38 @@ const SkitNew = props => {
                         touched={elm.data.touched}
                         />
                 })}
-                <Button type="submit" design="Success" size="xl" disabled={!submitable} >הוסף</Button>
+                <Button type="submit" design="Success" size="xl" disabled={!formState.valid} >הוסף</Button>
             </form>
         )
     }
 
     let pageContent;
-    switch(formState.step){
-        case 'loading':
-            pageContent = <Spinner message="טוען טופס..." />;
-            break;
-        case 'initial':
-            pageContent = renderForm();
-            break;
-        case 'submit':
-            pageContent = <Spinner message="שולח טופס..."/>
-            break;
-        case 'success':
-            pageContent = (
-                <>
-                    <p>המערכון נוסף בהצלחה</p>
-                    <Link to={formState.link}>לחץ כאן למעבר לעמוד המערכון</Link>
-                </>
-            ) 
-            break;
-        case 'failed':
-            pageContent = (
-                <>
-                    <p>שגיאה</p>
-                    <p>{formState.error}</p>
-                    <Button design="Warning" clicked={resetFormHandler}>חזרה</Button>
-                </>    
-            );
-            break;
-        default:
-            pageContent = <h1>אירעה שגיאה בעמוד</h1>    
+
+    if(formState.loading){
+        pageContent = <Spinner message={formState.loadingText} />;
+    }else if(formState.render){
+        pageContent = renderForm();
+    }
+
+    if (loading){
+        pageContent = <Spinner message="שולח טופס..." />;
+    }
+    else if(data){
+        pageContent = (
+            <>
+                <p>המערכון נוסף בהצלחה</p>
+                <Link to={`/skits/${data.youtube_id}`}>לחץ כאן למעבר לעמוד המערכון</Link>
+            </>
+        ) 
+    }
+    else if(error){
+        pageContent = (
+            <>
+                <p>שגיאה</p>
+                <p>{error}</p>
+                {/* <Button design="Warning" clicked={resetFormHandler}>חזרה</Button> */}
+            </>    
+        );
     }
 
     return(
