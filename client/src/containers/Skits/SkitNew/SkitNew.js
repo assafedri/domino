@@ -18,6 +18,8 @@ const formReducer = ( curFormState, action ) => {
             return { ...curFormState, loading: false, loadingText: null, render: true, valid: false }
         case 'valid':
             return { ...curFormState, valid: true }
+        case 'invalid':
+            return { ...curFormState, valid: false }
         default:   
             throw new Error('Reducer Error');     
     }
@@ -90,9 +92,8 @@ const SkitNew = () => {
             formIsValid = fieldsUpdate[id].valid && formIsValid;
         }
 
-        formIsValid && dispatch({type: 'valid'});
+        formIsValid ? dispatch({type: 'valid'}) : dispatch({type: 'invalid'});
         setFields(fieldsUpdate);
-
     }
 
     const submitFormHandler = e => {

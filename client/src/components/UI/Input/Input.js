@@ -1,10 +1,16 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import classes from './Input.module.scss';
 
 const Input = (props) => {
 
     let elm = null;
-    const [numSelected, setNumselected] = useState(props.elmType === 'multiselect' ? props.value.length : 0)
+    const [numSelected, setNumselected] = useState(0);
+
+    useEffect( () => {
+        if(props.elmType === 'multiselect'){
+            setNumselected(props.value.length);
+        }
+    }, [props] )
 
     const selectClickHandler = (e) => {
         e.target.classList.toggle(classes.Open)
@@ -83,7 +89,13 @@ const Input = (props) => {
 
                                         return(
                                             <div className={classes.Member} key={member._id}>
-                                                <input type="checkbox" id={member._id} name={props.name} value={member._id} onChange={props.changed} />
+                                                <input 
+                                                    type="checkbox" 
+                                                    id={member._id} 
+                                                    name={props.name} 
+                                                    value={member._id} 
+                                                    onChange={props.changed} 
+                                                    checked={ selected ? 'checked' : false} />
                                                 <label htmlFor={member._id} onClick={optionMarkHandler} className={selected}>
                                                     {member.name}
                                                 </label>

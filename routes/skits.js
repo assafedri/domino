@@ -11,7 +11,6 @@ router.get('/', async(req,res) => {
 
 // Post New
 router.post('/', async(req,res) => {
-    console.log(req.cody)
     try{
         let createdSkit = await Skit.create(req.body);
         for(actor of createdSkit.actors){
@@ -41,6 +40,38 @@ router.get('/:id', (req,res) => {
             }
         })
 })
+
+// Update One
+router.post('/:id/edit', async(req, res) => {
+    try{
+        const foundSkit = await Skit.findOneAndUpdate({youtube_id: req.params.id}, req.body);
+        const skitID = foundSkit._id.toString();
+        const allCast = await Actor.find({});
+
+        
+        allCast.forEach( async(act) => {
+            act.skits = act.skits.filter( sk => {
+                return sk.toString() !== foundSkit._id.toString()
+            })
+            await act.save();
+        } )
+        
+
+        for(actor of foundSkit.actors){
+            let foundActor = await Actor.findById(actor);
+            if(!foundActor.skits.includes(foundSkit._id.toString())){
+                foundActor.skits.push(foundSkit);  
+            }
+            await foundActor.save();
+        }
+        res.json(foundSkit);
+
+    }catch{ error => {
+        res.json(error);
+        console.log(error);
+    }}
+
+});
 
 // Destroy
 router.delete('/:id', (req, res) => {
